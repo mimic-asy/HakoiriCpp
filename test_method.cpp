@@ -10,14 +10,30 @@ namespace {
 
 
 
-//swap
-TEST(swap, puzzle){
+//swap tests
+TEST(swap, puzzle0){
 Eigen::MatrixXi puzzle0 = init_puzzle();
 Eigen::MatrixXi puzzle1 = init_puzzle();
 
+
 swap(puzzle0, 0, 0, 1, 1);
+puzzle1(0,0) = 0;
+puzzle1(1,1) = 1;
+ASSERT_EQ(puzzle0,puzzle1);
 }
 
+TEST(swap, puzzle1){
+Eigen::MatrixXi puzzle2 = init_puzzle();
+Eigen::MatrixXi puzzle3 = init_puzzle();
+
+swap(puzzle2, 4, 3, 0, 3);
+swap(puzzle2, 4, 0, 0, 3);
+
+puzzle3(4,3) = 2;
+puzzle3(0,3) = 8;
+puzzle3(4,0) = 9;
+ASSERT_EQ(puzzle2, puzzle3);
+}
 
 
 //area_check tests
@@ -63,6 +79,533 @@ ASSERT_EQ(test2[1].val,5);
 ASSERT_EQ(test2[1].y,2);
 ASSERT_EQ(test2[1].x,2);
 }
+
+TEST(inrange_check_right, boolean){
+
+area_check_return ret;
+ret.Func(0,3,1);
+ASSERT_FALSE(inrange_check_right(ret));
+}
+
+TEST (inrange_check_right, boolean1){
+area_check_return ret2;
+ret2.Func(0,2,1);
+
+ASSERT_TRUE(inrange_check_right(ret2));
+}
+
+TEST(inrange_check_right, boolean2){
+area_check_return ret3;
+ret3.Func(0,-1,1);
+
+ASSERT_FALSE(inrange_check_right(ret3));
+}
+
+TEST(inrange_check_right, boolean3){
+area_check_return ret4;
+ret4.Func(0,0,1);
+ASSERT_TRUE(inrange_check_right(ret4));
+}
+
+
+TEST(inrange_check_left, boolean4){
+area_check_return ret5;
+ret5.Func(0,0,1);
+ASSERT_FALSE(inrange_check_left(ret5));
+}
+
+TEST(inrange_check_left, boolean5){
+area_check_return ret6;
+ret6.Func(0,3,1);
+ASSERT_TRUE(inrange_check_left(ret6));
+}
+
+TEST(inrange_check_left, boolean6){
+area_check_return ret5;
+ret5.Func(0,-1,1);
+ASSERT_FALSE(inrange_check_left(ret5));
+}
+
+TEST(inrange_check_left, boolean7){
+area_check_return ret5;
+ret5.Func(0,5,1);
+ASSERT_FALSE(inrange_check_left(ret5));
+}
+
+TEST(inrange_check_down, boolean8){
+area_check_return ret5;
+ret5.Func(5,0,1);
+ASSERT_FALSE(inrange_check_down(ret5));
+}
+
+TEST(inrange_check_down, boolean9){
+area_check_return ret5;
+ret5.Func(0,0,1);
+ASSERT_TRUE(inrange_check_down(ret5));
+}
+
+TEST(inrange_check_up, boolean10){
+area_check_return ret5;
+ret5.Func(4,0,1);
+ASSERT_TRUE(inrange_check_up(ret5));
+}
+
+
+TEST(inrange_check_up, boolean11){
+area_check_return ret5;
+ret5.Func(0,0,1);
+ASSERT_FALSE(inrange_check_up(ret5));
+}
+
+
+TEST(inrange_check_up, boolean12){
+area_check_return ret5;
+ret5.Func(-1,0,1);
+ASSERT_FALSE(inrange_check_up(ret5));
+}
+
+
+TEST(inrange_check_up, boolean13){
+area_check_return ret5;
+ret5.Func(1,0,1);
+ASSERT_TRUE(inrange_check_up(ret5));
+}
+
+
+TEST(inrange_check_up, boolean14){
+area_check_return ret5;
+ret5.Func(5,0,1);
+ASSERT_FALSE(inrange_check_up(ret5));
+}
+
+TEST(vacant_check_right,bool0){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,3,2);
+ASSERT_FALSE(vacant_check_right(puzzle,ret));
+}
+
+TEST(vacant_check_right,bool1){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,-1,2);
+ASSERT_FALSE(vacant_check_right(puzzle,ret));
+}
+
+TEST(vacant_check_right,bool2){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,5,2);
+ASSERT_FALSE(vacant_check_right(puzzle,ret));
+}
+
+TEST(vacant_check_right,bool3){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(4,0,8);
+ASSERT_TRUE(vacant_check_right(puzzle,ret));
+}
+
+TEST(vacant_check_right,bool4){
+Eigen::MatrixXi puzzle = init_puzzle();
+puzzle(0,3) = 10;
+area_check_return ret;
+ret.Func(0,2,0);
+ASSERT_TRUE(vacant_check_right(puzzle,ret));
+}
+
+TEST(vacant_check_left,bool5){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(4,3,9);
+ASSERT_TRUE(vacant_check_left(puzzle,ret));
+}
+
+TEST(vacant_check_left,bool6){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+puzzle(0,0) = 10;
+ret.Func(0,1,0);
+ASSERT_TRUE(vacant_check_left(puzzle,ret));
+}
+
+TEST(vacant_check_left,bool7){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,0,0);
+ASSERT_FALSE(vacant_check_left(puzzle,ret));
+}
+
+TEST(vacant_check_left,bool8){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,-1,0);
+ASSERT_FALSE(vacant_check_left(puzzle,ret));
+}
+
+TEST(vacant_check_left,bool9){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,15,0);
+ASSERT_FALSE(vacant_check_left(puzzle,ret));
+}
+
+TEST(vacant_check_up,bool10){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(15,0,0);
+ASSERT_FALSE(vacant_check_up(puzzle,ret));
+}
+
+TEST(vacant_check_up,bool11){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(-1,0,0);
+ASSERT_FALSE(vacant_check_up(puzzle,ret));
+}
+
+TEST(vacant_check_up,bool12){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+puzzle(0,0) = 10;
+ret.Func(1,0,0);
+ASSERT_TRUE(vacant_check_up(puzzle,ret));
+}
+
+TEST(vacant_check_up,bool13){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+puzzle(3,0) = 10;
+ret.Func(4,0,0);
+ASSERT_TRUE(vacant_check_up(puzzle,ret));
+}
+
+TEST(vacant_check_down,bool14){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(15,0,0);
+ASSERT_FALSE(vacant_check_down(puzzle,ret));
+}
+
+TEST(vacant_check_down,bool15){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(-1,0,0);
+ASSERT_FALSE(vacant_check_down(puzzle,ret));
+}
+
+TEST(vacant_check_down,bool16){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(3,1,0);
+ASSERT_TRUE(vacant_check_down(puzzle,ret));
+}
+
+TEST(vacant_check_down,bool17){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+puzzle(2,0) = 10;
+ret.Func(1,0,0);
+ASSERT_TRUE(vacant_check_down(puzzle,ret));
+}
+
+TEST(move_1x1_to_left,comparison_puzzle0){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,1,0);
+puzzle = move_1x1_to_left(puzzle, ret);
+
+ASSERT_EQ(puzzle(0,0), 0);
+}
+
+TEST(move_1x1_to_left,comparison_puzzle1){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,3,0);
+puzzle = move_1x1_to_left(puzzle, ret);
+
+ASSERT_EQ(puzzle(0,3), 0);
+}
+
+TEST(move_1x1_to_right,comparison_puzzle2){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,0,0);
+puzzle = move_1x1_to_right(puzzle, ret);
+
+ASSERT_EQ(puzzle(0,0), 0);
+}
+
+
+TEST(move_1x1_to_right,comparison_puzzle3){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,2,0);
+puzzle = move_1x1_to_right(puzzle, ret);
+
+ASSERT_EQ(puzzle(0,2), 2);
+}
+
+TEST(move_1x1_to_up,comparison_puzzle3){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,0,0);
+puzzle = move_1x1_to_right(puzzle, ret);
+ret.Func(1,0,0);
+puzzle = move_1x1_to_up(puzzle, ret);
+
+ASSERT_EQ(puzzle(1,0), 0);
+}
+
+TEST(move_1x1_to_up,comparison_puzzle4){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(4,0,0);
+puzzle = move_1x1_to_up(puzzle, ret);
+
+ASSERT_EQ(puzzle(3,0),8);
+ASSERT_EQ(puzzle(4,0),3);
+}
+
+TEST(move_1x1_to_down,comparison_puzzle5){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(0,0,0);
+puzzle = move_1x1_to_right(puzzle, ret);
+ret.Func(0,0,0);
+puzzle = move_1x1_to_down(puzzle, ret);
+
+ASSERT_EQ(puzzle(0,0), 1);
+ASSERT_EQ(puzzle(1,0), 0);
+}
+
+TEST(move_1x1_to_down,comparison_puzzle6){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret;
+ret.Func(3,0,0);
+puzzle = move_1x1_to_down(puzzle, ret);
+
+ASSERT_EQ(puzzle(3,0), 8);
+ASSERT_EQ(puzzle(4,0), 3);
+}
+
+TEST(move_2x1_to_left,comparison_puz0){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(0,1,0);
+ret2.Func(1,1,0);
+puzzle = move_2x1_to_left(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(0,0),0);
+ASSERT_EQ(puzzle(1,0),0);
+}
+
+TEST(move_2x1_to_left,comparison_puz1){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(0,3,0);
+ret2.Func(1,3,0);
+puzzle = move_2x1_to_left(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(0,3),0);
+ASSERT_EQ(puzzle(1,3),0);
+}
+
+
+TEST(move_2x1_to_right,comparison_puz0){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(0,0,0);
+ret2.Func(1,0,0);
+puzzle = move_2x1_to_right(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(0,0),0);
+ASSERT_EQ(puzzle(1,0),0);
+}
+
+
+TEST(move_2x1_to_right,comparison_puz1){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(0,2,0);
+ret2.Func(1,2,0);
+puzzle = move_2x1_to_right(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(0,2),2);
+ASSERT_EQ(puzzle(1,2),2);
+}
+
+
+TEST(move_2x1_to_up,comparison_puz0){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(1,0,0);
+ret2.Func(2,0,0);
+puzzle = move_2x1_to_up(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(0,0),1);
+ASSERT_EQ(puzzle(1,0),3);
+ASSERT_EQ(puzzle(2,0),1);
+}
+
+TEST(move_2x1_to_up,comparison_puz1){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(3,0,0);
+ret2.Func(4,0,0);
+puzzle = move_2x1_to_up(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(2,0),3);
+ASSERT_EQ(puzzle(3,0),8);
+ASSERT_EQ(puzzle(4,0),3);
+}
+
+TEST(move_2x1_to_down,comparison_puz0){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(0,0,0);
+ret2.Func(1,0,0);
+puzzle = move_2x1_to_down(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(0,0),3);
+ASSERT_EQ(puzzle(1,0),1);
+ASSERT_EQ(puzzle(2,0),1);
+}
+
+TEST(move_2x1_to_down,comparison_puz1){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2;
+ret.Func(2,0,0);
+ret2.Func(3,0,0);
+puzzle = move_2x1_to_down(puzzle,ret,ret2);
+
+ASSERT_EQ(puzzle(2,0),8);
+ASSERT_EQ(puzzle(3,0),3);
+ASSERT_EQ(puzzle(4,0),3);
+}
+
+
+TEST(move_2x2_right,comp_puzzle0){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(0,1,0);
+ret2.Func(0,2,0);
+ret3.Func(1,1,0);
+ret4.Func(1,2,0);
+puzzle = move_2x2_right(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(0,2),0);
+ASSERT_EQ(puzzle(0,3),0);
+ASSERT_EQ(puzzle(1,2),0);
+ASSERT_EQ(puzzle(1,3),0);
+}
+
+TEST(move_2x2_right,comp_puzzle1){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(3,1,0);
+ret2.Func(3,2,0);
+ret3.Func(4,1,0);
+ret4.Func(4,2,0);
+puzzle = move_2x2_right(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(3,2),6);
+ASSERT_EQ(puzzle(3,3),7);
+ASSERT_EQ(puzzle(4,2),10);
+ASSERT_EQ(puzzle(4,3),10);
+}
+
+TEST(move_2x2_left,comp_puzzle2){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(0,1,0);
+ret2.Func(0,2,0);
+ret3.Func(1,1,0);
+ret4.Func(1,2,0);
+puzzle = move_2x2_left(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(0,0),0);
+ASSERT_EQ(puzzle(0,1),0);
+ASSERT_EQ(puzzle(1,0),0);
+ASSERT_EQ(puzzle(1,1),0);
+}
+
+TEST(move_2x2_left,comp_puzzle3){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(3,2,7);
+ret2.Func(3,3,4);
+ret3.Func(4,2,10);
+ret4.Func(4,3,9);
+puzzle = move_2x2_left(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(3,1),7);
+ASSERT_EQ(puzzle(3,2),4);
+ASSERT_EQ(puzzle(4,1),10);
+ASSERT_EQ(puzzle(4,2),9);
+}
+
+TEST(move_2x2_up,comp_puzzle4){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(1,0,1);
+ret2.Func(1,1,0);
+ret3.Func(2,0,3);
+ret4.Func(2,1,5);
+puzzle = move_2x2_up(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(0,0),1);
+ASSERT_EQ(puzzle(0,1),0);
+ASSERT_EQ(puzzle(1,0),3);
+ASSERT_EQ(puzzle(1,1),5);
+}
+
+TEST(move_2x2_up,comp_puzzle5){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(3,0,3);
+ret2.Func(3,1,6);
+ret3.Func(4,0,8);
+ret4.Func(4,1,10);
+puzzle = move_2x2_up(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(2,0),3);
+ASSERT_EQ(puzzle(2,1),6);
+ASSERT_EQ(puzzle(3,0),8);
+ASSERT_EQ(puzzle(3,1),10);
+}
+
+TEST(move_2x2_down,comp_puzzle6){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(0,1,0);
+ret2.Func(0,2,0);
+ret3.Func(1,1,0);
+ret4.Func(1,2,0);
+
+puzzle = move_2x2_down(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(1,1),0);
+ASSERT_EQ(puzzle(1,2),0);
+ASSERT_EQ(puzzle(2,1),0);
+ASSERT_EQ(puzzle(2,2),0);
+}
+
+TEST(move_2x2_down,comp_puzzle7){
+Eigen::MatrixXi puzzle = init_puzzle();
+area_check_return ret,ret2,ret3,ret4;
+ret.Func(2,0,3);
+ret2.Func(2,1,5);
+ret3.Func(3,0,3);
+ret4.Func(3,1,6);
+puzzle = move_2x2_down(puzzle,ret,ret2,ret3,ret4);
+
+ASSERT_EQ(puzzle(3,0),3);
+ASSERT_EQ(puzzle(3,1),5);
+ASSERT_EQ(puzzle(4,0),3);
+ASSERT_EQ(puzzle(4,1),6);
+}
+
 
 }
 
