@@ -962,5 +962,182 @@ EXPECT_EQ(list[1],6);
 EXPECT_EQ(list[2],7);
 }
 
+TEST(movepuzzle_right,compboard0){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_right(puzzle,0);
+
+EXPECT_EQ(puzzle(0,2),0);
+EXPECT_EQ(puzzle(1,2),0);
+EXPECT_EQ(puzzle(0,3),0);
+EXPECT_EQ(puzzle(1,3),0);
+}
+
+TEST(movepuzzle_right,compboard1){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_right(puzzle,1);
+
+EXPECT_EQ(puzzle(0,0),0);
+EXPECT_EQ(puzzle(1,0),0);
+EXPECT_EQ(puzzle(0,1),1);
+EXPECT_EQ(puzzle(1,1),1);
+}
+
+TEST(movepuzzle_right,compboard2){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_right(puzzle,5);
+
+EXPECT_EQ(puzzle(2,3),5);
+EXPECT_EQ(puzzle(2,2),5);
+EXPECT_EQ(puzzle(2,1),4);
+}
+
+TEST(movepuzzle_right,compboard3){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_right(puzzle,8);
+
+EXPECT_EQ(puzzle(4,0),10);
+EXPECT_EQ(puzzle(4,1),8);
+
+}
+
+TEST(MovePuzzle_Left,CompBoard0){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_left(puzzle,0);
+
+EXPECT_EQ(puzzle(0,0),0);
+EXPECT_EQ(puzzle(1,0),0);
+EXPECT_EQ(puzzle(1,1),0);
+EXPECT_EQ(puzzle(1,1),0);
+EXPECT_EQ(puzzle(0,2),1);
+EXPECT_EQ(puzzle(1,2),1);
+}
+
+TEST(MovePuzzle_Left,CompBoard1){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_left(puzzle,1);
+
+EXPECT_EQ(puzzle(0,0),0);
+EXPECT_EQ(puzzle(1,0),0);
+EXPECT_EQ(puzzle(0,1),1);
+EXPECT_EQ(puzzle(1,1),1);
+}
+
+TEST(MovePuzzle_Left,CompBoard2){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_left(puzzle,5);
+
+EXPECT_EQ(puzzle(2,0),5);
+EXPECT_EQ(puzzle(2,1),5);
+EXPECT_EQ(puzzle(2,2),3);
+}
+
+TEST(MovePuzzle_Left,CompBoard3){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_left(puzzle,9);
+
+EXPECT_EQ(puzzle(4,2),9);
+EXPECT_EQ(puzzle(4,3),10);
+}
+
+TEST(MovePuzzle_up,CompBoard1){
+Eigen::MatrixXi puzzle = init_puzzle();
+puzzle(0,1) = 5;
+puzzle(0,2) = 5;
+puzzle(2,1) = 0;
+puzzle(2,2) = 0;
+
+puzzle = movepuzzle_up(puzzle,0);
+
+EXPECT_EQ(puzzle(0,1),0);
+EXPECT_EQ(puzzle(0,2),0);
+EXPECT_EQ(puzzle(1,1),0);
+EXPECT_EQ(puzzle(1,2),0);
+}
+
+TEST(MovePuzzle_up,CompBoard2){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_up(puzzle,3);
+
+EXPECT_EQ(puzzle(1,0),3);
+EXPECT_EQ(puzzle(2,0),3);
+EXPECT_EQ(puzzle(3,0),1);
+EXPECT_EQ(puzzle(0,0),1);
+}
+
+
+TEST(MovePuzzle_up,CompBoard3){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_up(puzzle,5);
+
+EXPECT_EQ(puzzle(1,1),5);
+EXPECT_EQ(puzzle(1,2),5);
+EXPECT_EQ(puzzle(2,1),0);
+EXPECT_EQ(puzzle(2,2),0);
+}
+
+TEST(MovePuzzle_up,CompBoard4){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_up(puzzle,9);
+
+EXPECT_EQ(puzzle(3,3),9);
+EXPECT_EQ(puzzle(4,3),4);
+}
+
+TEST(MovePuzzle_down,CompBoard1){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_down(puzzle,0);
+
+EXPECT_EQ(puzzle(2,1),0);
+EXPECT_EQ(puzzle(2,2),0);
+EXPECT_EQ(puzzle(1,1),0);
+EXPECT_EQ(puzzle(1,2),0);
+EXPECT_EQ(puzzle(0,1),5);
+EXPECT_EQ(puzzle(0,2),5);
+}
+
+TEST(MovePuzzle_down,CompBoard2){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_down(puzzle,1);
+
+EXPECT_EQ(puzzle(1,0),1);
+EXPECT_EQ(puzzle(2,0),1);
+EXPECT_EQ(puzzle(0,0),3);
+}
+
+TEST(MovePuzzle_down,CompBoard3){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_down(puzzle,5);
+
+EXPECT_EQ(puzzle(3,1),5);
+EXPECT_EQ(puzzle(3,2),5);
+EXPECT_EQ(puzzle(2,1),6);
+EXPECT_EQ(puzzle(2,2),7);
+}
+
+TEST(MovePuzzle_down,CompBoard4){
+Eigen::MatrixXi puzzle = init_puzzle();
+
+puzzle = movepuzzle_down(puzzle,6);
+
+EXPECT_EQ(puzzle(4,1),6);
+EXPECT_EQ(puzzle(3,1),10);
+
+}
+
+
 }
 
