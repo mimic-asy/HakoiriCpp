@@ -167,7 +167,40 @@ bool vacant_check_down(Eigen::MatrixXi puzzle, class area_check_return ret){
     }
 }
 
-//mada
+
+bool range_and_vacantcheck_right(Eigen::MatrixXi puzzle, class area_check_return ret){
+    if (inrange_check_right(ret) && vacant_check_right(puzzle,ret)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool range_and_vacantcheck_left(Eigen::MatrixXi puzzle, class area_check_return ret){
+ if (inrange_check_left(ret) && vacant_check_left(puzzle,ret)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool range_and_vacantcheck_up(Eigen::MatrixXi puzzle, class area_check_return ret){
+ if (inrange_check_up(ret) && vacant_check_up(puzzle,ret)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
+bool range_and_vacantcheck_down(Eigen::MatrixXi puzzle, class area_check_return ret){
+ if (inrange_check_down(ret) && vacant_check_down(puzzle,ret)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 Eigen::MatrixXi move_1x1_to_right(Eigen::MatrixXi &puzzle, class area_check_return &ret){
     int xt = ret.x +1;
@@ -280,4 +313,278 @@ Eigen::MatrixXi move_2x2_down(Eigen::MatrixXi &puzzle, class area_check_return &
     return puzzle;
 
 }
+
+
+
+bool clear(Eigen::MatrixXi puzzle){
+    if(puzzle(4,1) == 0 && puzzle(4,2) == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
+
+Eigen::MatrixXi num_simple(Eigen::MatrixXi puzzle, int i){
+    Eigen::MatrixXi copy_puzzle = puzzle;
+    std::vector<area_check_return> num = area_check(puzzle,i);
+     for (const auto& item : num) {
+        if (item.val > 0 && item.val <5){
+            copy_puzzle(item.y, item.x) = 2;
+        }else if(item.val > 5 && item.val < 10){
+            copy_puzzle(item.y, item.x ) = 3;
+        }else{
+            continue;
+        }
+    }
+    return copy_puzzle;
+}
+
+
+Eigen::MatrixXi board_simple(Eigen::MatrixXi &puzzle){
+    for (int i = 1; i < 10; i++ ){
+        puzzle = num_simple(puzzle,i);
+    }
+    return puzzle;
+}
+
+
+bool check_rightside(Eigen::MatrixXi puzzle, int checkval){
+    std::vector<area_check_return> num = area_check(puzzle,checkval);
+
+    if (checkval > 0 && checkval < 5 ){
+        for (const auto& item : num){
+            if(range_and_vacantcheck_right(puzzle,item) == false){
+                return false;
+            }
+            return true;
+        }
+
+    }else if(checkval > 5 && checkval <10 ){
+        return range_and_vacantcheck_right(puzzle,num[0]);
+
+    }else if(checkval == 5){
+        return range_and_vacantcheck_right(puzzle,num[1]);
+
+    }else if(checkval == 0){
+        if(range_and_vacantcheck_right(puzzle,num[1]) && range_and_vacantcheck_right(puzzle,num[3])){
+            return true;
+        }
+        return false;
+
+    }else{
+        return false;
+    }
+
+    return false;
+}
+
+bool check_leftside(Eigen::MatrixXi puzzle, int checkval){
+    std::vector<area_check_return> num = area_check(puzzle,checkval);
+
+    if(checkval > 0 && checkval < 5){
+        for (const auto& item : num){
+            if(range_and_vacantcheck_left(puzzle,item) == false){
+                return false;
+            }
+        }
+        return true;
+
+    }else if(checkval > 4 && checkval < 10){
+        return range_and_vacantcheck_left(puzzle,num[0]);
+
+    }else if(checkval == 0){
+        if(range_and_vacantcheck_left(puzzle,num[0]) && range_and_vacantcheck_left(puzzle,num[2])){
+            return true;
+
+        }
+        return false;
+
+    }
+    return false;
+}
+
+bool check_upside(Eigen::MatrixXi puzzle, int checkval){
+    std::vector<area_check_return> num = area_check(puzzle,checkval);
+
+    if(checkval == 5){
+        for (const auto& item : num){
+            if(range_and_vacantcheck_up(puzzle,item) == false){
+                return false;
+            }
+        }
+        return true;
+
+    }else if(checkval > 0 && checkval < 10 && checkval != 5){
+        return range_and_vacantcheck_up(puzzle,num[0]);
+
+    }else if(checkval == 0){
+        if(range_and_vacantcheck_up(puzzle,num[0]) && range_and_vacantcheck_up(puzzle,num[1])){
+            return true;
+
+        }
+        return false;
+
+    }
+    return false;
+}
+
+bool check_downside(Eigen::MatrixXi puzzle, int checkval){
+    std::vector<area_check_return> num = area_check(puzzle,checkval);
+
+    if(checkval == 5){
+        for (const auto& item : num){
+            if(range_and_vacantcheck_down(puzzle,item) == false){
+                return false;
+            }
+        }
+        return true;
+
+    }else if(checkval > 0 && checkval < 5){
+        return range_and_vacantcheck_down(puzzle,num[1]);
+    }else if(checkval > 5 && checkval < 10){
+        return range_and_vacantcheck_down(puzzle,num[0]);
+
+    }else if(checkval == 0){
+        if(range_and_vacantcheck_down(puzzle,num[2]) && range_and_vacantcheck_down(puzzle,num[3])){
+            return true;
+
+        }
+        return false;
+
+    }
+    return false;
+}
+
+//動かせる数字をリストにする
+
+std::vector<int> right_movable_list(Eigen::MatrixXi puzzle){
+    std::vector<int> stack_moveright;
+    for(int i = 0; i < 10 ; i++){
+        if(check_rightside(puzzle,i)){
+            stack_moveright.push_back(i);
+        }
+    }
+    return stack_moveright;
+}
+
+std::vector<int> left_movable_list(Eigen::MatrixXi puzzle){
+    std::vector<int> stack_moveleft;
+    for(int i = 0; i < 10 ; i++){
+        if(check_leftside(puzzle,i)){
+            stack_moveleft.push_back(i);
+        }
+    }
+    return stack_moveleft;
+}
+
+std::vector<int> up_movable_list(Eigen::MatrixXi puzzle){
+    std::vector<int> stack_moveup;
+    for(int i = 0; i < 10 ; i++){
+        if(check_upside(puzzle,i)){
+            stack_moveup.push_back(i);
+        }
+    }
+    return stack_moveup;
+}
+
+std::vector<int> down_movable_list(Eigen::MatrixXi puzzle){
+    std::vector<int> stack_movedown;
+    for(int i = 0; i < 10 ; i++){
+        if(check_downside(puzzle,i)){
+            stack_movedown.push_back(i);
+        }
+    }
+    return stack_movedown;
+}
+
+//動かす
+
+Eigen::MatrixXi movepuzzle_right(Eigen::MatrixXi &puzzle,int val){
+    if(val == 0){
+        std::vector<area_check_return> num = area_check(puzzle,0);
+        Eigen::MatrixXi ret_puzzle = move_2x2_right(puzzle,num[0],num[1],num[2],num[3]);
+        return ret_puzzle;
+
+    }else if(val > 0 && val < 6){
+        std::vector<area_check_return> num = area_check(puzzle,val);
+        Eigen::MatrixXi ret_puzzle = move_2x1_to_right(puzzle,num[0],num[1]);
+        return ret_puzzle;
+
+    }else{
+        std::vector<area_check_return> num = area_check(puzzle,val);
+        Eigen::MatrixXi ret_puzzle = move_1x1_to_right(puzzle,num[0]);
+        return ret_puzzle;
+
+    }
+
+}
+
+Eigen::MatrixXi movepuzzle_left(Eigen::MatrixXi &puzzle,int val){
+    if(val == 0){
+        std::vector<area_check_return> num = area_check(puzzle,0);
+        Eigen::MatrixXi ret_puzzle = move_2x2_left(puzzle,num[0],num[1],num[2],num[3]);
+        return ret_puzzle;
+
+    }else if(val > 0 && val < 6){
+        std::vector<area_check_return> num = area_check(puzzle,val);
+        Eigen::MatrixXi ret_puzzle = move_2x1_to_left(puzzle,num[0],num[1]);
+        return ret_puzzle;
+
+    }else{
+        std::vector<area_check_return> num = area_check(puzzle,val);
+        Eigen::MatrixXi ret_puzzle = move_1x1_to_left(puzzle,num[0]);
+        return ret_puzzle;
+
+    }
+
+}
+
+Eigen::MatrixXi movepuzzle_up(Eigen::MatrixXi &puzzle,int val){
+    if(val == 0){
+        std::vector<area_check_return> num = area_check(puzzle,0);
+        Eigen::MatrixXi ret_puzzle = move_2x2_up(puzzle,num[0],num[1],num[2],num[3]);
+        return ret_puzzle;
+
+    }else if(val > 0 && val < 6){
+        std::vector<area_check_return> num = area_check(puzzle,val);
+        Eigen::MatrixXi ret_puzzle = move_2x1_to_up(puzzle,num[0],num[1]);
+        return ret_puzzle;
+
+    }else{
+        std::vector<area_check_return> num = area_check(puzzle,val);
+
+        Eigen::MatrixXi ret_puzzle = move_1x1_to_up(puzzle,num[0]);
+        return ret_puzzle;
+
+    }
+
+}
+
+Eigen::MatrixXi movepuzzle_down(Eigen::MatrixXi &puzzle,int val){
+    if(val == 0){
+        std::vector<area_check_return> num = area_check(puzzle,0);
+        Eigen::MatrixXi ret_puzzle = move_2x2_down(puzzle,num[0],num[1],num[2],num[3]);
+        return ret_puzzle;
+
+    }else if(val > 0 && val < 6){
+        std::vector<area_check_return> num = area_check(puzzle,val);
+        Eigen::MatrixXi ret_puzzle = move_2x1_to_down(puzzle,num[0],num[1]);
+        return ret_puzzle;
+
+    }else{
+        std::vector<area_check_return> num = area_check(puzzle,val);
+        Eigen::MatrixXi ret_puzzle = move_1x1_to_down(puzzle,num[0]);
+        return ret_puzzle;
+
+    }
+
+}
+
+
+
+
+
+
 
