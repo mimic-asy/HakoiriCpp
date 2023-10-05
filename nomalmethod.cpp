@@ -686,6 +686,21 @@ std::string to_hashable(const Matrix54i& simple_puzzle) {
 }
 
 
+std::string to_hashable_comma(const Matrix54i& simple_puzzle) {
+    std::string hash;
+    for(int y = 0; y < 5; y ++){
+        for(int x = 0; x < 4 ; x++){
+            int num = simple_puzzle(y,x);
+            std::string str = std::to_string(num);
+            hash += str;
+            hash += ",";
+        }
+    }
+    return hash;
+}
+
+
+
 bool exist( std::string hash_puzzle, std::vector<std::string>  puzzle_state){
     if(std::find(puzzle_state.begin(), puzzle_state.end(), hash_puzzle) == puzzle_state.end()){
         return true;
@@ -726,7 +741,6 @@ void queue_state_append(Matrix54i before_moving, std::vector<Matrix54i> movable,
 
             puzzle_state.push_back(hash_puzzle);
             puzzle_list.push(state);
-            std::cout<< "new token = \n" << state << std::endl;
 
             if (clear(state)) {
                 std::vector<Matrix54i> add_c_route = route(edges,state);
@@ -763,7 +777,7 @@ while(!puzzle_list.empty()){
 
 
 
-int shortest(std::vector<std::vector<Matrix54i>> &c_route){
+std::vector<Matrix54i> shortest(std::vector<std::vector<Matrix54i>> &c_route){
     std::vector<Matrix54i> shortest_vec;
     bool isFirst = true;
     for(std::vector<Matrix54i> v: c_route){
@@ -775,8 +789,11 @@ int shortest(std::vector<std::vector<Matrix54i>> &c_route){
     for(Matrix54i a : shortest_vec){
         std::cout << a << std::endl;
     }
-    return shortest_vec.size();
+    return shortest_vec;
 }
+
+
+
 
 
 

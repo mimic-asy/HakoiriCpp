@@ -6,6 +6,7 @@
 #include <queue>
 #include <unordered_map>
 #include <functional>
+#include <fstream>
 
 
 using Matrix54i = Eigen::Matrix<int, 5, 4>;
@@ -83,6 +84,7 @@ std::vector<Matrix54i> move_up(Matrix54i &puzzle);
 std::vector<Matrix54i> move_down(Matrix54i &puzzle);
 std::vector<Matrix54i> moved_board_list(Matrix54i &puzzle);
 std::string to_hashable(const Matrix54i& simple_puzzle);
+std::string to_hashable_comma(const Matrix54i& simple_puzzle);
 
 struct KeyHasher
 {   //インスタンスを取得する->operator
@@ -109,6 +111,6 @@ std::vector<Matrix54i> route(std::unordered_map<Matrix54i, Matrix54i , KeyHasher
 void queue_state_append(Matrix54i before_moving, std::vector<Matrix54i> movable, std::vector<std::string> &puzzle_state,
                        std::unordered_map<Matrix54i, Matrix54i , KeyHasher, KeyEqual> &edges, std::queue<Matrix54i> &puzzle_list, std::vector<std::vector<Matrix54i>> &c_route);
 std::vector<std::vector<Matrix54i>> breadth_first_search(Matrix54i &puzzle);
-int shortest(std::vector<std::vector<Matrix54i>> &c_route);
+std::vector<Matrix54i> shortest(std::vector<std::vector<Matrix54i>> &c_route);
 
 #endif
