@@ -16,6 +16,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
+include_directories(include)
+
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 add_library(Hakoirimusume_lib nomalmethod.cpp)

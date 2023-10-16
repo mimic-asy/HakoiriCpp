@@ -1,4 +1,4 @@
-#include "method.h"
+#include "puzzle/puzzle_method.hpp"
 #include "gtest/gtest.h"
 #include <iostream>
 #include <Eigen/Dense>
@@ -36,11 +36,11 @@ EXPECT_EQ(puzzle2, puzzle3);
 }
 
 
-//area_check tests
-TEST(area_check, Value){
+//find_location tests
+TEST(find_location, Value){
 Matrix54i puzzle = init_puzzle();
-std::vector<area_check_return> test1;
-test1 = area_check(puzzle,1);
+std::vector<find_location_return> test1;
+test1 = find_location(puzzle,1);
 EXPECT_EQ(test1[0].val,1);
 EXPECT_EQ(test1[0].y,0);
 EXPECT_EQ(test1[0].x,0);
@@ -49,10 +49,10 @@ EXPECT_EQ(test1[1].y,1);
 EXPECT_EQ(test1[1].x,0);
 }
 
-TEST(area_check, Value0){
+TEST(find_location, Value0){
 Matrix54i puzzle = init_puzzle();
-std::vector<area_check_return> test0;
-test0 = area_check(puzzle,0);
+std::vector<find_location_return> test0;
+test0 = find_location(puzzle,0);
 EXPECT_EQ(test0[0].val,0);
 EXPECT_EQ(test0[0].y,0);
 EXPECT_EQ(test0[0].x,1);
@@ -68,10 +68,10 @@ EXPECT_EQ(test0[3].x,2);
 }
 
 
-TEST(area_check, Value5){
+TEST(find_location, Value5){
 Matrix54i puzzle = init_puzzle();
-std::vector<area_check_return> test2;
-test2 = area_check(puzzle,5);
+std::vector<find_location_return> test2;
+test2 = find_location(puzzle,5);
 EXPECT_EQ(test2[0].val,5);
 EXPECT_EQ(test2[0].y,2);
 EXPECT_EQ(test2[0].x,1);
@@ -82,256 +82,256 @@ EXPECT_EQ(test2[1].x,2);
 
 TEST(inrange_check_right, boolean){
 
-area_check_return ret;
-ret.Func(0,3,1);
+find_location_return ret;
+ret.set_value(0,3,1);
 EXPECT_FALSE(inrange_check_right(ret));
 }
 
 TEST (inrange_check_right, boolean1){
-area_check_return ret2;
-ret2.Func(0,2,1);
+find_location_return ret2;
+ret2.set_value(0,2,1);
 
 EXPECT_TRUE(inrange_check_right(ret2));
 }
 
 TEST(inrange_check_right, boolean2){
-area_check_return ret3;
-ret3.Func(0,-1,1);
+find_location_return ret3;
+ret3.set_value(0,-1,1);
 
 EXPECT_FALSE(inrange_check_right(ret3));
 }
 
 TEST(inrange_check_right, boolean3){
-area_check_return ret4;
-ret4.Func(0,0,1);
+find_location_return ret4;
+ret4.set_value(0,0,1);
 EXPECT_TRUE(inrange_check_right(ret4));
 }
 
 
 TEST(inrange_check_left, boolean4){
-area_check_return ret5;
-ret5.Func(0,0,1);
+find_location_return ret5;
+ret5.set_value(0,0,1);
 EXPECT_FALSE(inrange_check_left(ret5));
 }
 
 TEST(inrange_check_left, boolean5){
-area_check_return ret6;
-ret6.Func(0,3,1);
+find_location_return ret6;
+ret6.set_value(0,3,1);
 EXPECT_TRUE(inrange_check_left(ret6));
 }
 
 TEST(inrange_check_left, boolean6){
-area_check_return ret5;
-ret5.Func(0,-1,1);
+find_location_return ret5;
+ret5.set_value(0,-1,1);
 EXPECT_FALSE(inrange_check_left(ret5));
 }
 
 TEST(inrange_check_left, boolean7){
-area_check_return ret5;
-ret5.Func(0,5,1);
+find_location_return ret5;
+ret5.set_value(0,5,1);
 EXPECT_FALSE(inrange_check_left(ret5));
 }
 
 TEST(inrange_check_down, boolean8){
-area_check_return ret5;
-ret5.Func(5,0,1);
+find_location_return ret5;
+ret5.set_value(5,0,1);
 EXPECT_FALSE(inrange_check_down(ret5));
 }
 
 TEST(inrange_check_down, boolean9){
-area_check_return ret5;
-ret5.Func(0,0,1);
+find_location_return ret5;
+ret5.set_value(0,0,1);
 EXPECT_TRUE(inrange_check_down(ret5));
 }
 
 TEST(inrange_check_up, boolean10){
-area_check_return ret5;
-ret5.Func(4,0,1);
+find_location_return ret5;
+ret5.set_value(4,0,1);
 EXPECT_TRUE(inrange_check_up(ret5));
 }
 
 
 TEST(inrange_check_up, boolean11){
-area_check_return ret5;
-ret5.Func(0,0,1);
+find_location_return ret5;
+ret5.set_value(0,0,1);
 EXPECT_FALSE(inrange_check_up(ret5));
 }
 
 
 TEST(inrange_check_up, boolean12){
-area_check_return ret5;
-ret5.Func(-1,0,1);
+find_location_return ret5;
+ret5.set_value(-1,0,1);
 EXPECT_FALSE(inrange_check_up(ret5));
 }
 
 
 TEST(inrange_check_up, boolean13){
-area_check_return ret5;
-ret5.Func(1,0,1);
+find_location_return ret5;
+ret5.set_value(1,0,1);
 EXPECT_TRUE(inrange_check_up(ret5));
 }
 
 
 TEST(inrange_check_up, boolean14){
-area_check_return ret5;
-ret5.Func(5,0,1);
+find_location_return ret5;
+ret5.set_value(5,0,1);
 EXPECT_FALSE(inrange_check_up(ret5));
 }
 
-TEST(vacant_check_right,bool0){
+TEST(empty_check_right,bool0){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,3,2);
-EXPECT_FALSE(vacant_check_right(puzzle,ret));
+find_location_return ret;
+ret.set_value(0,3,2);
+EXPECT_FALSE(empty_check_right(puzzle,ret));
 }
 
-TEST(vacant_check_right,bool1){
+TEST(empty_check_right,bool1){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,-1,2);
-EXPECT_FALSE(vacant_check_right(puzzle,ret));
+find_location_return ret;
+ret.set_value(0,-1,2);
+EXPECT_FALSE(empty_check_right(puzzle,ret));
 }
 
-TEST(vacant_check_right,bool2){
+TEST(empty_check_right,bool2){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,5,2);
-EXPECT_FALSE(vacant_check_right(puzzle,ret));
+find_location_return ret;
+ret.set_value(0,5,2);
+EXPECT_FALSE(empty_check_right(puzzle,ret));
 }
 
-TEST(vacant_check_right,bool3){
+TEST(empty_check_right,bool3){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(4,0,8);
-EXPECT_TRUE(vacant_check_right(puzzle,ret));
+find_location_return ret;
+ret.set_value(4,0,8);
+EXPECT_TRUE(empty_check_right(puzzle,ret));
 }
 
-TEST(vacant_check_right,bool4){
+TEST(empty_check_right,bool4){
 Matrix54i puzzle = init_puzzle();
 puzzle(0,3) = 10;
-area_check_return ret;
-ret.Func(0,2,0);
-EXPECT_TRUE(vacant_check_right(puzzle,ret));
+find_location_return ret;
+ret.set_value(0,2,0);
+EXPECT_TRUE(empty_check_right(puzzle,ret));
 }
 
-TEST(vacant_check_left,bool5){
+TEST(empty_check_left,bool5){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(4,3,9);
-EXPECT_TRUE(vacant_check_left(puzzle,ret));
+find_location_return ret;
+ret.set_value(4,3,9);
+EXPECT_TRUE(empty_check_left(puzzle,ret));
 }
 
-TEST(vacant_check_left,bool6){
+TEST(empty_check_left,bool6){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
+find_location_return ret;
 puzzle(0,0) = 10;
-ret.Func(0,1,0);
-EXPECT_TRUE(vacant_check_left(puzzle,ret));
+ret.set_value(0,1,0);
+EXPECT_TRUE(empty_check_left(puzzle,ret));
 }
 
-TEST(vacant_check_left,bool7){
+TEST(empty_check_left,bool7){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,0,0);
-EXPECT_FALSE(vacant_check_left(puzzle,ret));
+find_location_return ret;
+ret.set_value(0,0,0);
+EXPECT_FALSE(empty_check_left(puzzle,ret));
 }
 
-TEST(vacant_check_left,bool8){
+TEST(empty_check_left,bool8){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,-1,0);
-EXPECT_FALSE(vacant_check_left(puzzle,ret));
+find_location_return ret;
+ret.set_value(0,-1,0);
+EXPECT_FALSE(empty_check_left(puzzle,ret));
 }
 
-TEST(vacant_check_left,bool9){
+TEST(empty_check_left,bool9){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,15,0);
-EXPECT_FALSE(vacant_check_left(puzzle,ret));
+find_location_return ret;
+ret.set_value(0,15,0);
+EXPECT_FALSE(empty_check_left(puzzle,ret));
 }
 
-TEST(vacant_check_up,bool10){
+TEST(empty_check_up,bool10){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(15,0,0);
-EXPECT_FALSE(vacant_check_up(puzzle,ret));
+find_location_return ret;
+ret.set_value(15,0,0);
+EXPECT_FALSE(empty_check_up(puzzle,ret));
 }
 
-TEST(vacant_check_up,bool11){
+TEST(empty_check_up,bool11){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(-1,0,0);
-EXPECT_FALSE(vacant_check_up(puzzle,ret));
+find_location_return ret;
+ret.set_value(-1,0,0);
+EXPECT_FALSE(empty_check_up(puzzle,ret));
 }
 
-TEST(vacant_check_up,bool12){
+TEST(empty_check_up,bool12){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
+find_location_return ret;
 puzzle(0,0) = 10;
-ret.Func(1,0,0);
-EXPECT_TRUE(vacant_check_up(puzzle,ret));
+ret.set_value(1,0,0);
+EXPECT_TRUE(empty_check_up(puzzle,ret));
 }
 
-TEST(vacant_check_up,bool13){
+TEST(empty_check_up,bool13){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
+find_location_return ret;
 puzzle(3,0) = 10;
-ret.Func(4,0,0);
-EXPECT_TRUE(vacant_check_up(puzzle,ret));
+ret.set_value(4,0,0);
+EXPECT_TRUE(empty_check_up(puzzle,ret));
 }
 
-TEST(vacant_check_down,bool14){
+TEST(empty_check_down,bool14){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(15,0,0);
-EXPECT_FALSE(vacant_check_down(puzzle,ret));
+find_location_return ret;
+ret.set_value(15,0,0);
+EXPECT_FALSE(empty_check_down(puzzle,ret));
 }
 
-TEST(vacant_check_down,bool15){
+TEST(empty_check_down,bool15){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(-1,0,0);
-EXPECT_FALSE(vacant_check_down(puzzle,ret));
+find_location_return ret;
+ret.set_value(-1,0,0);
+EXPECT_FALSE(empty_check_down(puzzle,ret));
 }
 
-TEST(vacant_check_down,bool16){
+TEST(empty_check_down,bool16){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(3,1,0);
-EXPECT_TRUE(vacant_check_down(puzzle,ret));
+find_location_return ret;
+ret.set_value(3,1,0);
+EXPECT_TRUE(empty_check_down(puzzle,ret));
 }
 
-TEST(vacant_check_down,bool17){
+TEST(empty_check_down,bool17){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
+find_location_return ret;
 puzzle(2,0) = 10;
-ret.Func(1,0,0);
-EXPECT_TRUE(vacant_check_down(puzzle,ret));
+ret.set_value(1,0,0);
+EXPECT_TRUE(empty_check_down(puzzle,ret));
 }
 
 TEST(move_1x1_to_left,comparison_puzzle0){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,1,0);
-puzzle = move_1x1_to_left(puzzle, ret);
+find_location_return ret;
+ret.set_value(0,1,0);
+move_1x1_to_left(puzzle, ret);
 
 EXPECT_EQ(puzzle(0,0), 0);
 }
 
 TEST(move_1x1_to_left,comparison_puzzle1){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,3,0);
-puzzle = move_1x1_to_left(puzzle, ret);
+find_location_return ret;
+ret.set_value(0,3,0);
+move_1x1_to_left(puzzle, ret);
 
 EXPECT_EQ(puzzle(0,3), 0);
 }
 
 TEST(move_1x1_to_right,comparison_puzzle2){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,0,0);
-puzzle = move_1x1_to_right(puzzle, ret);
+find_location_return ret;
+ret.set_value(0,0,0);
+move_1x1_to_right(puzzle, ret);
 
 EXPECT_EQ(puzzle(0,0), 0);
 }
@@ -339,29 +339,29 @@ EXPECT_EQ(puzzle(0,0), 0);
 
 TEST(move_1x1_to_right,comparison_puzzle3){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,2,0);
-puzzle = move_1x1_to_right(puzzle, ret);
+find_location_return ret;
+ret.set_value(0,2,0);
+move_1x1_to_right(puzzle, ret);
 
 EXPECT_EQ(puzzle(0,2), 2);
 }
 
 TEST(move_1x1_to_up,comparison_puzzle3){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,0,0);
-puzzle = move_1x1_to_right(puzzle, ret);
-ret.Func(1,0,0);
-puzzle = move_1x1_to_up(puzzle, ret);
+find_location_return ret;
+ret.set_value(0,0,0);
+move_1x1_to_right(puzzle, ret);
+ret.set_value(1,0,0);
+move_1x1_to_up(puzzle, ret);
 
 EXPECT_EQ(puzzle(1,0), 0);
 }
 
 TEST(move_1x1_to_up,comparison_puzzle4){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(4,0,0);
-puzzle = move_1x1_to_up(puzzle, ret);
+find_location_return ret;
+ret.set_value(4,0,0);
+move_1x1_to_up(puzzle, ret);
 
 EXPECT_EQ(puzzle(3,0),8);
 EXPECT_EQ(puzzle(4,0),3);
@@ -369,11 +369,11 @@ EXPECT_EQ(puzzle(4,0),3);
 
 TEST(move_1x1_to_down,comparison_puzzle5){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(0,0,0);
-puzzle = move_1x1_to_right(puzzle, ret);
-ret.Func(0,0,0);
-puzzle = move_1x1_to_down(puzzle, ret);
+find_location_return ret;
+ret.set_value(0,0,0);
+move_1x1_to_right(puzzle, ret);
+ret.set_value(0,0,0);
+move_1x1_to_down(puzzle, ret);
 
 EXPECT_EQ(puzzle(0,0), 1);
 EXPECT_EQ(puzzle(1,0), 0);
@@ -381,9 +381,9 @@ EXPECT_EQ(puzzle(1,0), 0);
 
 TEST(move_1x1_to_down,comparison_puzzle6){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret;
-ret.Func(3,0,0);
-puzzle = move_1x1_to_down(puzzle, ret);
+find_location_return ret;
+ret.set_value(3,0,0);
+move_1x1_to_down(puzzle, ret);
 
 EXPECT_EQ(puzzle(3,0), 8);
 EXPECT_EQ(puzzle(4,0), 3);
@@ -391,10 +391,10 @@ EXPECT_EQ(puzzle(4,0), 3);
 
 TEST(move_2x1_to_left,comparison_puz0){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(0,1,0);
-ret2.Func(1,1,0);
-puzzle = move_2x1_to_left(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(0,1,0);
+ret2.set_value(1,1,0);
+move_2x1_to_left(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(0,0),0);
 EXPECT_EQ(puzzle(1,0),0);
@@ -402,10 +402,10 @@ EXPECT_EQ(puzzle(1,0),0);
 
 TEST(move_2x1_to_left,comparison_puz1){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(0,3,0);
-ret2.Func(1,3,0);
-puzzle = move_2x1_to_left(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(0,3,0);
+ret2.set_value(1,3,0);
+move_2x1_to_left(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(0,3),0);
 EXPECT_EQ(puzzle(1,3),0);
@@ -414,10 +414,10 @@ EXPECT_EQ(puzzle(1,3),0);
 
 TEST(move_2x1_to_right,comparison_puz0){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(0,0,0);
-ret2.Func(1,0,0);
-puzzle = move_2x1_to_right(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(0,0,0);
+ret2.set_value(1,0,0);
+move_2x1_to_right(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(0,0),0);
 EXPECT_EQ(puzzle(1,0),0);
@@ -426,10 +426,10 @@ EXPECT_EQ(puzzle(1,0),0);
 
 TEST(move_2x1_to_right,comparison_puz1){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(0,2,0);
-ret2.Func(1,2,0);
-puzzle = move_2x1_to_right(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(0,2,0);
+ret2.set_value(1,2,0);
+move_2x1_to_right(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(0,2),2);
 EXPECT_EQ(puzzle(1,2),2);
@@ -438,10 +438,10 @@ EXPECT_EQ(puzzle(1,2),2);
 
 TEST(move_2x1_to_up,comparison_puz0){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(1,0,0);
-ret2.Func(2,0,0);
-puzzle = move_2x1_to_up(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(1,0,0);
+ret2.set_value(2,0,0);
+move_2x1_to_up(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(0,0),1);
 EXPECT_EQ(puzzle(1,0),3);
@@ -450,10 +450,10 @@ EXPECT_EQ(puzzle(2,0),1);
 
 TEST(move_2x1_to_up,comparison_puz1){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(3,0,0);
-ret2.Func(4,0,0);
-puzzle = move_2x1_to_up(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(3,0,0);
+ret2.set_value(4,0,0);
+move_2x1_to_up(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(2,0),3);
 EXPECT_EQ(puzzle(3,0),8);
@@ -462,10 +462,10 @@ EXPECT_EQ(puzzle(4,0),3);
 
 TEST(move_2x1_to_down,comparison_puz0){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(0,0,0);
-ret2.Func(1,0,0);
-puzzle = move_2x1_to_down(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(0,0,0);
+ret2.set_value(1,0,0);
+move_2x1_to_down(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(0,0),3);
 EXPECT_EQ(puzzle(1,0),1);
@@ -474,10 +474,10 @@ EXPECT_EQ(puzzle(2,0),1);
 
 TEST(move_2x1_to_down,comparison_puz1){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2;
-ret.Func(2,0,0);
-ret2.Func(3,0,0);
-puzzle = move_2x1_to_down(puzzle,ret,ret2);
+find_location_return ret,ret2;
+ret.set_value(2,0,0);
+ret2.set_value(3,0,0);
+move_2x1_to_down(puzzle,ret,ret2);
 
 EXPECT_EQ(puzzle(2,0),8);
 EXPECT_EQ(puzzle(3,0),3);
@@ -487,12 +487,12 @@ EXPECT_EQ(puzzle(4,0),3);
 
 TEST(move_2x2_right,comp_puzzle0){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(0,1,0);
-ret2.Func(0,2,0);
-ret3.Func(1,1,0);
-ret4.Func(1,2,0);
-puzzle = move_2x2_right(puzzle,ret,ret2,ret3,ret4);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(0,1,0);
+ret2.set_value(0,2,0);
+ret3.set_value(1,1,0);
+ret4.set_value(1,2,0);
+move_2x2_right(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(0,2),0);
 EXPECT_EQ(puzzle(0,3),0);
@@ -502,12 +502,12 @@ EXPECT_EQ(puzzle(1,3),0);
 
 TEST(move_2x2_right,comp_puzzle1){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(3,1,0);
-ret2.Func(3,2,0);
-ret3.Func(4,1,0);
-ret4.Func(4,2,0);
-puzzle = move_2x2_right(puzzle,ret,ret2,ret3,ret4);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(3,1,0);
+ret2.set_value(3,2,0);
+ret3.set_value(4,1,0);
+ret4.set_value(4,2,0);
+move_2x2_right(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(3,2),6);
 EXPECT_EQ(puzzle(3,3),7);
@@ -517,12 +517,12 @@ EXPECT_EQ(puzzle(4,3),10);
 
 TEST(move_2x2_left,comp_puzzle2){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(0,1,0);
-ret2.Func(0,2,0);
-ret3.Func(1,1,0);
-ret4.Func(1,2,0);
-puzzle = move_2x2_left(puzzle,ret,ret2,ret3,ret4);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(0,1,0);
+ret2.set_value(0,2,0);
+ret3.set_value(1,1,0);
+ret4.set_value(1,2,0);
+move_2x2_left(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(0,0),0);
 EXPECT_EQ(puzzle(0,1),0);
@@ -532,12 +532,12 @@ EXPECT_EQ(puzzle(1,1),0);
 
 TEST(move_2x2_left,comp_puzzle3){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(3,2,7);
-ret2.Func(3,3,4);
-ret3.Func(4,2,10);
-ret4.Func(4,3,9);
-puzzle = move_2x2_left(puzzle,ret,ret2,ret3,ret4);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(3,2,7);
+ret2.set_value(3,3,4);
+ret3.set_value(4,2,10);
+ret4.set_value(4,3,9);
+move_2x2_left(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(3,1),7);
 EXPECT_EQ(puzzle(3,2),4);
@@ -547,12 +547,12 @@ EXPECT_EQ(puzzle(4,2),9);
 
 TEST(move_2x2_up,comp_puzzle4){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(1,0,1);
-ret2.Func(1,1,0);
-ret3.Func(2,0,3);
-ret4.Func(2,1,5);
-puzzle = move_2x2_up(puzzle,ret,ret2,ret3,ret4);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(1,0,1);
+ret2.set_value(1,1,0);
+ret3.set_value(2,0,3);
+ret4.set_value(2,1,5);
+move_2x2_up(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(0,0),1);
 EXPECT_EQ(puzzle(0,1),0);
@@ -562,12 +562,12 @@ EXPECT_EQ(puzzle(1,1),5);
 
 TEST(move_2x2_up,comp_puzzle5){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(3,0,3);
-ret2.Func(3,1,6);
-ret3.Func(4,0,8);
-ret4.Func(4,1,10);
-puzzle = move_2x2_up(puzzle,ret,ret2,ret3,ret4);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(3,0,3);
+ret2.set_value(3,1,6);
+ret3.set_value(4,0,8);
+ret4.set_value(4,1,10);
+move_2x2_up(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(2,0),3);
 EXPECT_EQ(puzzle(2,1),6);
@@ -577,13 +577,13 @@ EXPECT_EQ(puzzle(3,1),10);
 
 TEST(move_2x2_down,comp_puzzle6){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(0,1,0);
-ret2.Func(0,2,0);
-ret3.Func(1,1,0);
-ret4.Func(1,2,0);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(0,1,0);
+ret2.set_value(0,2,0);
+ret3.set_value(1,1,0);
+ret4.set_value(1,2,0);
 
-puzzle = move_2x2_down(puzzle,ret,ret2,ret3,ret4);
+move_2x2_down(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(1,1),0);
 EXPECT_EQ(puzzle(1,2),0);
@@ -593,12 +593,12 @@ EXPECT_EQ(puzzle(2,2),0);
 
 TEST(move_2x2_down,comp_puzzle7){
 Matrix54i puzzle = init_puzzle();
-area_check_return ret,ret2,ret3,ret4;
-ret.Func(2,0,3);
-ret2.Func(2,1,5);
-ret3.Func(3,0,3);
-ret4.Func(3,1,6);
-puzzle = move_2x2_down(puzzle,ret,ret2,ret3,ret4);
+find_location_return ret,ret2,ret3,ret4;
+ret.set_value(2,0,3);
+ret2.set_value(2,1,5);
+ret3.set_value(3,0,3);
+ret4.set_value(3,1,6);
+move_2x2_down(puzzle,ret,ret2,ret3,ret4);
 
 EXPECT_EQ(puzzle(3,0),3);
 EXPECT_EQ(puzzle(3,1),5);
@@ -794,63 +794,63 @@ puzzle(2,1) = 10;
 EXPECT_TRUE(check_downside(puzzle,0));
 }
 
-TEST(right_movable_list,listval){
+TEST(numbers_canmove_right,listval){
 Matrix54i puzzle = init_puzzle();
-std::vector<int> list = right_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_right(puzzle);
 EXPECT_EQ(list[0],8);
 }
 
-TEST(right_movable_list,listval1){
+TEST(numbers_canmove_right,listval1){
 Matrix54i puzzle = init_puzzle();
 
 puzzle(0,1) = 10;
 puzzle(1,1) = 10;
 
-std::vector<int> list = right_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_right(puzzle);
 
 EXPECT_EQ(list[0],1);
 EXPECT_EQ(list[1],8);
 }
 
-TEST(right_movable_list,listval2){
+TEST(numbers_canmove_right,listval2){
 Matrix54i puzzle = init_puzzle();
 
 puzzle(3,2) = 10;
 puzzle(4,2) = 7;
 
 
-std::vector<int> list = right_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_right(puzzle);
 
 EXPECT_EQ(list[0],6);
 
 }
 
 
-TEST(right_movable_list,listval3){
+TEST(numbers_canmove_right,listval3){
 Matrix54i puzzle = init_puzzle();
 
 puzzle(0,3) = 10;
 puzzle(1,3) = 10;
 
-std::vector<int> list = right_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_right(puzzle);
 
 EXPECT_EQ(list[0],0);
 }
 
-TEST(left_movable_list,listval4){
+TEST(numbers_canmove_left,listval4){
 Matrix54i puzzle = init_puzzle();
 
 puzzle(0,2) = 10;
 puzzle(1,2) = 10;
 
-std::vector<int> list = left_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_left(puzzle);
 
 EXPECT_EQ(list[0],2);
 EXPECT_EQ(list[1],9);
 }
 
 
-TEST(left_movable_list,listva5){
+TEST(numbers_canmove_left,listva5){
 Matrix54i puzzle = init_puzzle();
 
 puzzle(0,0) = 10;
@@ -861,37 +861,37 @@ puzzle(4,1) = 3;
 puzzle(4,2) = 3;
 
 
-std::vector<int> list = left_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_left(puzzle);
 
 EXPECT_EQ(list[0],0);
 }
 
 
-TEST(left_movable_list,listval6){
+TEST(numbers_canmove_left,listval6){
 Matrix54i puzzle = init_puzzle();
 
 puzzle(2,0) = 10;
 
 
-std::vector<int> list = left_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_left(puzzle);
 
 EXPECT_EQ(list[0],5);
 EXPECT_EQ(list[1],9);
 }
 
 
-TEST(up_movable_list,listval7){
+TEST(numbers_canmove_up,listval7){
 Matrix54i puzzle = init_puzzle();
 
 puzzle(2,1) = 10;
 
-std::vector<int> list = up_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_up(puzzle);
 
 EXPECT_EQ(list[0],6);
 
 }
 
-TEST(up_movable_list,listval8){
+TEST(numbers_canmove_up,listval8){
 Matrix54i puzzle = init_puzzle();
 puzzle(0,1) = 10;
 puzzle(0,2) = 10;
@@ -899,67 +899,67 @@ puzzle(2,1) = 0;
 puzzle(2,2) = 0;
 
 
-std::vector<int> list = up_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_up(puzzle);
 
 EXPECT_EQ(list[0],0);
 
 }
 
-TEST(up_movable_list,listval9){
+TEST(numbers_canmove_up,listval9){
 Matrix54i puzzle = init_puzzle();
 puzzle(1,0) = 10;
 
-std::vector<int> list = up_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_up(puzzle);
 
 EXPECT_EQ(list[0],3);
 
 }
 
-TEST(up_movable_list,listval10){
+TEST(numbers_canmove_up,listval10){
 Matrix54i puzzle = init_puzzle();
 puzzle(1,1) = 10;
 puzzle(1,2) = 10;
 
 
 
-std::vector<int> list = up_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_up(puzzle);
 
 EXPECT_EQ(list[0],5);
 
 }
 
-TEST(down_movable_list,listval11){
+TEST(numbers_canmove_down,listval11){
 Matrix54i puzzle = init_puzzle();
 
-std::vector<int> list = down_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_down(puzzle);
 
 EXPECT_EQ(list[0],6);
 EXPECT_EQ(list[1],7);
 
 }
 
-TEST(down_movable_list,listval12){
+TEST(numbers_canmove_down,listval12){
 Matrix54i puzzle = init_puzzle();
 puzzle(2,0) = 10;
 
-std::vector<int> list = down_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_down(puzzle);
 EXPECT_EQ(list[0],1);
 EXPECT_EQ(list[1],6);
 EXPECT_EQ(list[2],7);
 
 }
 
-TEST(down_movable_list,listval13){
+TEST(numbers_canmove_down,listval13){
 Matrix54i puzzle = init_puzzle();
 puzzle(3,1) = 10;
 puzzle(3,2) = 10;
 puzzle(4,1) = 6;
 puzzle(4,2) = 7;
-std::vector<int> list = down_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_down(puzzle);
 EXPECT_EQ(list[0],5);
 }
 
-TEST(down_movable_list,listval14){
+TEST(numbers_canmove_down,listval14){
 Matrix54i puzzle = init_puzzle();
 puzzle(4,1) = 5;
 puzzle(4,2) = 5;
@@ -967,7 +967,7 @@ puzzle(2,1) = 10;
 puzzle(2,2) = 10;
 
 
-std::vector<int> list = down_movable_list(puzzle);
+std::vector<int> list = numbers_canmove_down(puzzle);
 EXPECT_EQ(list[0],0);
 
 }
