@@ -116,7 +116,7 @@ std::vector<Matrix54i> moved_board_list(Matrix54i &puzzle);
 std::string to_hashable(const Matrix54i& simple_puzzle);
 std::string to_hashable_pluscomma(const Matrix54i& simple_puzzle);
 bool exist(const std::string hash_puzzle,
-const std::vector<std::string>  puzzle_state);
+std::vector<std::string>  puzzle_state);
 std::vector<Matrix54i> clearroute(std::unordered_map<Matrix54i, Matrix54i,
  KeyHasher, KeyEqual>& edges, const Matrix54i moved_puzzle);
 void queue_state_append(Matrix54i before_moving, std::vector<Matrix54i> movable,
@@ -126,5 +126,7 @@ std::queue<Matrix54i> &puzzle_list,
 std::vector<std::vector<Matrix54i>> &c_route);
 std::vector<std::vector<Matrix54i>> breadth_first_search(Matrix54i &puzzle);
 std::vector<Matrix54i> shortestroute_find(const std::vector<std::vector<Matrix54i>> &c_route);
+
+std::vector<std::vector<Matrix54i>> breadth_first_search_usetime(Matrix54i &puzzle);
 
 #endif
