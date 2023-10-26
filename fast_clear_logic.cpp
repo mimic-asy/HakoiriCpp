@@ -7,12 +7,6 @@
 #include "puzzle/puzzle_logic.hpp"
 #include "puzzle/graph_logic.hpp"
 
-bool keyexists(const std::unordered_map<std::string, std::string, KeyHasher_std, KeyEqual_std> &puzzle_index, const std::string &key)
-{
-    std::map<std :: string, std::string> map;
-    auto it = map.find(key);
-    return it != map.end();
-}
 
 void fastqueue(Matrix54i now_puzzle,
                std::vector<Matrix54i> movable,
@@ -38,7 +32,7 @@ void fastqueue(Matrix54i now_puzzle,
         Matrix54i simple_puzzle = board_simple(state_copy);
 
         std::string hash_puzzle = to_hashable(simple_puzzle);
-        if (!keyexists(puzzle_index, hash_puzzle))
+        if (!isvalue_already(puzzle_index, hash_puzzle))
         {
             equal_stock.push_back(state);
             edges[state] = equal_stock;
