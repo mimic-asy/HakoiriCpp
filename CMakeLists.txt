@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Hakoirimusume)
 
-add_compile_options(-O3)
+add_compile_options(-O3 -g)
 
 set(CMAKE_CXX_STANDARD 17)
 
