@@ -20,42 +20,46 @@ bool isvalue_already(const std::unordered_map<std::string, std::string, KeyHashe
     return it != puzzle_index.end();
 }
 
+void make_newnode(const Matrix54i state, int i, node new_node, node now)
+{
+    new_node.puzzle = state;
+    new_node.cost = i;
+    new_node.side_node.push_back(now);
+}
+
 void dikstrqueue(const int i,
-                 const Matrix54i & now_puzzle,
-                 const std::vector<Matrix54i> & movable,
+                 const Matrix54i &now_puzzle,
+                 const std::vector<Matrix54i> &movable,
                  std::unordered_map<std::string, std::string, KeyHasher_std, KeyEqual_std> &puzzle_index,
                  std::unordered_map<Matrix54i, node, KeyHasher, KeyEqual> &edges,
                  std::vector<std::vector<node>> &clear_route,
                  std::queue<Matrix54i> &puzzle_list)
 {
-
+    Matrix54i copy_now_puzzle = now_puzzle;
+    Matrix54i now_simple = board_simple(copy_now_puzzle);
+    node now = edges.at(now_simple);
 
     for (const Matrix54i &state : movable)
     {
-        
-        node now = edges.at(now_puzzle);
-        std::string hash_puzzle = to_hashable(state);
+        Matrix54i state_copy = state;
+        Matrix54i state_simple = board_simple(state_copy);
+        std::string hash_puzzle = to_hashable(state_simple);
 
-        assert((edges.find(state) != edges.end()) == isvalue_already(puzzle_index, hash_puzzle));
         if (!isvalue_already(puzzle_index, hash_puzzle))
         {
             node new_node;
-            new_node.puzzle = state;
-            new_node.cost = i;
-            new_node.side_node.push_back(now);
-            now.side_node.push_back(new_node);
-            edges[state] = new_node;
+            make_newnode(state, i, new_node, now);
+            edges[state_simple] = new_node;
             puzzle_index[hash_puzzle] = hash_puzzle;
             puzzle_list.push(state);
-
 
             if (clear(state))
             {
                 std::vector<node> route;
-
-                while (new_node.cost == 0)
+                while (new_node.cost>0)
                 {
                     route.push_back(new_node);
+                    std::cout << new_node.cost << std::endl;
                     new_node = dikstr(new_node);
                 }
                 clear_route.push_back(route);
@@ -63,43 +67,33 @@ void dikstrqueue(const int i,
         }
         else
         {
-            node already = edges.at(state);
+            node already = edges.at(state_simple);
             already.side_node.push_back(now);
-            if(find_side(now,already)){
-                now.side_node.push_back(already);
-            }
-
         }
     }
-}
-
-bool find_side(node already, node now)
-{
-    for (node side : already.side_node)
-    {
-        if (side.puzzle == now.puzzle)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzzle)
 {
+    // sengen
     std::unordered_map<Matrix54i, node, KeyHasher, KeyEqual> edges;
     std::unordered_map<std::string, std::string, KeyHasher_std, KeyEqual_std> puzzle_index;
     std::queue<Matrix54i> puzzle_list;
-
     std::vector<std::vector<node>> clear_route;
-    puzzle_list.push(puzzle);
     node first_node;
+    // dequeに初期盤面を追加
+    puzzle_list.push(puzzle);
+    // puzzleを複製
+    Matrix54i copy_puzzle = puzzle;
+    // puzzleを比較するための形にする
+    Matrix54i simple_puzzle = board_simple(copy_puzzle);
+    // string型に変換する
+    std::string str = to_hashable(simple_puzzle);
+
+    // nodeの設定を行う
     first_node.puzzle = puzzle;
     first_node.cost = 0;
-    edges[puzzle] = first_node;
-
-    Matrix54i copy_puzzle = puzzle;
-    std::string str = to_hashable(puzzle);
+    edges[simple_puzzle] = first_node;
     puzzle_index[str] = str;
     int i = 0;
     while (!puzzle_list.empty())
@@ -119,21 +113,17 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
 
 node dikstr(node now_node)
 {
-    //最も小さいノードを定義
+    // 最も小さいノードを定義
     node min_node;
-    //今のパズルをプリント
-    std::cout << now_node.puzzle << std::endl;
+    int min = -1;
 
     for (node n : now_node.side_node)
     {
-
-        int min = -1;
         if (min == -1)
         {
             min = n.cost;
             min_node = n;
         }
-
         if (min > n.cost)
         {
             min = n.cost;
@@ -144,8 +134,6 @@ node dikstr(node now_node)
             min_node = dikstrloop(min_node, n);
         }
     }
-    std::cout << min_node.cost << std::endl;
-    std::cout << min_node.puzzle << std::endl;
 
     return min_node;
 }
