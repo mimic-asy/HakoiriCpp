@@ -6,7 +6,7 @@
 #include "puzzle/puzzle_logic.hpp"
 #include "puzzle/graph_logic.hpp"
 
-bool clear(const Matrix54i puzzle)
+bool clear(const Matrix54i &puzzle)
 {
     if (puzzle(4, 1) == 0 && puzzle(4, 2) == 0)
     {
@@ -18,7 +18,7 @@ bool clear(const Matrix54i puzzle)
     }
 }
 
-Matrix54i num_simple(const Matrix54i puzzle, const int i)
+Matrix54i num_simple(const Matrix54i &puzzle, const int i)
 {
     Matrix54i copy_puzzle = puzzle;
     std::vector<find_location_return> num = find_location(puzzle, i);
@@ -40,16 +40,17 @@ Matrix54i num_simple(const Matrix54i puzzle, const int i)
     return copy_puzzle;
 }
 
-Matrix54i board_simple(Matrix54i &puzzle)
+Matrix54i board_simple(const Matrix54i &puzzle)
 {
+    Matrix54i copy_puzzle = puzzle;
     for (int i = 1; i < 10; i++)
     {
-        puzzle = num_simple(puzzle, i);
+        copy_puzzle = num_simple(copy_puzzle, i);
     }
-    return puzzle;
+    return copy_puzzle;
 }
 
-bool range_and_emptycheck_right(Matrix54i puzzle, class find_location_return ret)
+bool range_and_emptycheck_right(const Matrix54i &puzzle, const class find_location_return &ret)
 {
     if (inrange_check_right(ret) && empty_check_right(puzzle, ret))
     {
@@ -61,7 +62,7 @@ bool range_and_emptycheck_right(Matrix54i puzzle, class find_location_return ret
     }
 }
 
-bool range_and_emptycheck_left(Matrix54i puzzle, class find_location_return ret)
+bool range_and_emptycheck_left(const Matrix54i &puzzle, const class find_location_return &ret)
 {
     if (inrange_check_left(ret) && empty_check_left(puzzle, ret))
     {
@@ -73,7 +74,7 @@ bool range_and_emptycheck_left(Matrix54i puzzle, class find_location_return ret)
     }
 }
 
-bool range_and_emptycheck_up(Matrix54i puzzle, class find_location_return ret)
+bool range_and_emptycheck_up(const Matrix54i &puzzle, const class find_location_return &ret)
 {
     if (inrange_check_up(ret) && empty_check_up(puzzle, ret))
     {
@@ -85,7 +86,7 @@ bool range_and_emptycheck_up(Matrix54i puzzle, class find_location_return ret)
     }
 }
 
-bool range_and_emptycheck_down(Matrix54i puzzle, class find_location_return ret)
+bool range_and_emptycheck_down(const Matrix54i &puzzle, const class find_location_return &ret)
 {
     if (inrange_check_down(ret) && empty_check_down(puzzle, ret))
     {
@@ -97,7 +98,7 @@ bool range_and_emptycheck_down(Matrix54i puzzle, class find_location_return ret)
     }
 }
 
-bool check_rightside(Matrix54i puzzle, int checkval)
+bool check_rightside(const Matrix54i &puzzle, const int checkval)
 {
     std::vector<find_location_return> num = find_location(puzzle, checkval);
 
@@ -137,7 +138,7 @@ bool check_rightside(Matrix54i puzzle, int checkval)
     return false;
 }
 
-bool check_leftside(Matrix54i puzzle, int checkval)
+bool check_leftside(const Matrix54i &puzzle, const int checkval)
 {
     std::vector<find_location_return> num = find_location(puzzle, checkval);
 
@@ -167,7 +168,7 @@ bool check_leftside(Matrix54i puzzle, int checkval)
     return false;
 }
 
-bool check_upside(Matrix54i puzzle, int checkval)
+bool check_upside(const Matrix54i &puzzle, int checkval)
 {
     std::vector<find_location_return> num = find_location(puzzle, checkval);
 
@@ -204,7 +205,7 @@ bool check_upside(Matrix54i puzzle, int checkval)
     return false;
 }
 
-bool check_downside(Matrix54i puzzle, int checkval)
+bool check_downside(const Matrix54i &puzzle, int checkval)
 {
     std::vector<find_location_return> num = find_location(puzzle, checkval);
     if (checkval == 5)
@@ -237,7 +238,7 @@ bool check_downside(Matrix54i puzzle, int checkval)
     return false;
 }
 
-std::vector<int> numbers_canmove_right(const Matrix54i puzzle)
+std::vector<int> numbers_canmove_right(const Matrix54i &puzzle)
 {
     std::vector<int> stack_moveright;
     for (int i = 0; i < 10; i++)
@@ -250,7 +251,7 @@ std::vector<int> numbers_canmove_right(const Matrix54i puzzle)
     return stack_moveright;
 }
 
-std::vector<int> numbers_canmove_left(const Matrix54i puzzle)
+std::vector<int> numbers_canmove_left(const Matrix54i &puzzle)
 {
     std::vector<int> stack_moveleft;
     for (int i = 0; i < 10; i++)
@@ -263,7 +264,7 @@ std::vector<int> numbers_canmove_left(const Matrix54i puzzle)
     return stack_moveleft;
 }
 
-std::vector<int> numbers_canmove_up(const Matrix54i puzzle)
+std::vector<int> numbers_canmove_up(const Matrix54i &puzzle)
 {
     std::vector<int> stack_moveup;
     for (int i = 0; i < 10; i++)
@@ -276,7 +277,7 @@ std::vector<int> numbers_canmove_up(const Matrix54i puzzle)
     return stack_moveup;
 }
 
-std::vector<int> numbers_canmove_down(const Matrix54i puzzle)
+std::vector<int> numbers_canmove_down(const Matrix54i &puzzle)
 {
     std::vector<int> stack_movedown;
     for (int i = 0; i < 10; i++)
@@ -289,7 +290,7 @@ std::vector<int> numbers_canmove_down(const Matrix54i puzzle)
     return stack_movedown;
 }
 
-Matrix54i movepuzzle_right(Matrix54i &puzzle, const int val)
+Matrix54i movepuzzle_right(const Matrix54i &puzzle, const int val)
 {
     Matrix54i copy_puzzle = puzzle;
     if (val == 0)
@@ -312,7 +313,7 @@ Matrix54i movepuzzle_right(Matrix54i &puzzle, const int val)
     }
 }
 
-Matrix54i movepuzzle_left(Matrix54i &puzzle, const int val)
+Matrix54i movepuzzle_left(const Matrix54i &puzzle, const int val)
 {
     Matrix54i copy_puzzle = puzzle;
     if (val == 0)
@@ -335,7 +336,7 @@ Matrix54i movepuzzle_left(Matrix54i &puzzle, const int val)
     }
 }
 
-Matrix54i movepuzzle_up(Matrix54i &puzzle, const int val)
+Matrix54i movepuzzle_up(const Matrix54i &puzzle, const int val)
 {
     Matrix54i copy_puzzle = puzzle;
     if (val == 0)
@@ -358,7 +359,7 @@ Matrix54i movepuzzle_up(Matrix54i &puzzle, const int val)
     }
 }
 
-Matrix54i movepuzzle_down(Matrix54i &puzzle, const int val)
+Matrix54i movepuzzle_down(const Matrix54i &puzzle, const int val)
 {
     Matrix54i copy_puzzle = puzzle;
     if (val == 0)
@@ -382,7 +383,7 @@ Matrix54i movepuzzle_down(Matrix54i &puzzle, const int val)
     }
 }
 
-std::vector<Matrix54i> move_right(Matrix54i &puzzle)
+std::vector<Matrix54i> move_right(const Matrix54i &puzzle)
 {
     std::vector<Matrix54i> ret_list;
     std::vector<int> right_movenum = numbers_canmove_right(puzzle);
@@ -394,7 +395,7 @@ std::vector<Matrix54i> move_right(Matrix54i &puzzle)
     return ret_list;
 }
 
-std::vector<Matrix54i> move_left(Matrix54i &puzzle)
+std::vector<Matrix54i> move_left(const Matrix54i &puzzle)
 {
     std::vector<Matrix54i> ret_list;
     std::vector<int> left_movenum = numbers_canmove_left(puzzle);
@@ -406,7 +407,7 @@ std::vector<Matrix54i> move_left(Matrix54i &puzzle)
     return ret_list;
 }
 
-std::vector<Matrix54i> move_up(Matrix54i &puzzle)
+std::vector<Matrix54i> move_up(const Matrix54i &puzzle)
 {
     std::vector<Matrix54i> ret_list;
     std::vector<int> up_movenum = numbers_canmove_up(puzzle);
@@ -418,7 +419,7 @@ std::vector<Matrix54i> move_up(Matrix54i &puzzle)
     return ret_list;
 }
 
-std::vector<Matrix54i> move_down(Matrix54i &puzzle)
+std::vector<Matrix54i> move_down(const Matrix54i &puzzle)
 {
     std::vector<Matrix54i> ret_list;
     std::vector<int> down_movenum = numbers_canmove_down(puzzle);
@@ -508,7 +509,7 @@ std::string to_hashable_pluscomma(const Matrix54i &simple_puzzle)
     return hash;
 }
 
-bool exist(const std::string hash_puzzle,
+bool exist(const std::string &hash_puzzle,
            std::vector<std::string> puzzle_state)
 {
     std::chrono::system_clock::time_point start, end; // 計測用関数

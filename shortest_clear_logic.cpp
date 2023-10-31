@@ -49,7 +49,6 @@ void dikstrqueue(const int i,
         {
             node new_node;
             make_newnode(state, i, new_node, now);
-            std::cout << new_node.cost << std::endl;
             edges[state_simple] = new_node;
             puzzle_index[hash_puzzle] = hash_puzzle;
             puzzle_list.push(state);
@@ -84,9 +83,8 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     // dequeに初期盤面を追加
     puzzle_list.push(puzzle);
     // puzzleを複製
-    Matrix54i copy_puzzle = puzzle;
     // puzzleを比較するための形にする
-    Matrix54i simple_puzzle = board_simple(copy_puzzle);
+    Matrix54i simple_puzzle = board_simple(puzzle);
     // string型に変換する
     std::string str = to_hashable(simple_puzzle);
 

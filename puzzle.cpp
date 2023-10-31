@@ -43,7 +43,7 @@ void find_location_return::set_value(int yv, int xv, int v) {
     val = v;
 }
 
-std::vector<find_location_return> find_location(const Matrix54i puzzle,
+std::vector<find_location_return> find_location(const Matrix54i &puzzle,
 const int targetValue) {
     std::vector<find_location_return> ret_list;
     int rows = puzzle.rows();
