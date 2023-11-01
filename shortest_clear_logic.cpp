@@ -36,7 +36,7 @@ void dikstrqueue(
     const std::vector<Matrix54i> &movable,
     comparative_index &puzzle_index,
     node_index &edges,
-    std::vector<node> &clear_route,
+    std::vector<node> &clear_nodes,
     std::queue<Matrix54i> &puzzle_list,
     std::vector<Matrix54i> &matrix_index)
 {
@@ -62,7 +62,7 @@ void dikstrqueue(
 
             if (clear(state))
             {
-                clear_route.push_back(new_node);
+                clear_nodes.push_back(new_node);
 
             }
         }
@@ -80,7 +80,7 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     node_index edges;
     comparative_index puzzle_index;
     std::queue<Matrix54i> puzzle_list;
-    std::vector<node> clear_route;
+    std::vector<node> clear_nodes;
     std::vector<std::vector<node>> clear_routes;
     node first_node;
     // dequeに初期盤面を追加
@@ -108,11 +108,11 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
         std::vector<Matrix54i> movable = moved_board_list(now_puzzle);
         i++;
         dikstrqueue(count_matrix, i, now_puzzle, movable,
-                    puzzle_index, edges, clear_route, puzzle_list ,matrix_index);
+                    puzzle_index, edges, clear_nodes, puzzle_list ,matrix_index);
     }
 
 
-    for(node &clear_node : clear_route){
+    for(node &clear_node : clear_nodes){
         std::vector<node> route;
         while (clear_node.cost > 0)
         {
