@@ -36,7 +36,7 @@ void dikstrqueue(
     const std::vector<Matrix54i> &movable,
     comparative_index &puzzle_index,
     node_index &edges,
-    std::vector<std::vector<node>> &clear_route,
+    std::vector<node> &clear_route,
     std::queue<Matrix54i> &puzzle_list,
     std::vector<Matrix54i> &matrix_index)
 {
@@ -62,13 +62,8 @@ void dikstrqueue(
 
             if (clear(state))
             {
-                std::vector<node> route;
-                while (new_node.cost > 0)
-                {
-                    route.push_back(new_node);
-                    new_node = dikstr(new_node);
-                }
-                clear_route.push_back(route);
+                clear_route.push_back(new_node);
+
             }
         }
         else
@@ -85,7 +80,8 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     node_index edges;
     comparative_index puzzle_index;
     std::queue<Matrix54i> puzzle_list;
-    std::vector<std::vector<node>> clear_route;
+    std::vector<node> clear_route;
+    std::vector<std::vector<node>> clear_routes;
     node first_node;
     // dequeに初期盤面を追加
     puzzle_list.push(puzzle);
@@ -115,11 +111,22 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
                     puzzle_index, edges, clear_route, puzzle_list ,matrix_index);
     }
 
-    std::vector<node> s = shortestroute_find_dikstr(clear_route);
+
+    for(node &clear_node : clear_route){
+        std::vector<node> route;
+        while (clear_node.cost > 0)
+        {
+            route.push_back(clear_node);
+            clear_node = dikstr(clear_node);
+        }
+        clear_routes.push_back(route);
+    }
+
+    std::vector<node> s = shortestroute_find_dikstr(clear_routes);
     std::cout << "総手数は" << puzzle_index.size() << "手です" << std::endl;
     std::cout << "クリアルートは" << s.size() << "手です" << std::endl;
 
-    return clear_route;
+    return clear_routes;
 }
 
 node dikstr(node &now_node)

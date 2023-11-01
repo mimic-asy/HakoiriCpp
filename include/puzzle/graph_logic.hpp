@@ -116,7 +116,7 @@ void dikstrqueue(
     const std::vector<Matrix54i> &movable,
     comparative_index &puzzle_index,
     node_index &edges,
-    std::vector<std::vector<node>> &clear_route,
+    std::vector<node> &clear_route,
     std::queue<Matrix54i> &puzzle_list,
     std::vector<Matrix54i> &matrix_index);
 std::vector<node> shortestroute_find_dikstr(const std::vector<std::vector<node>> &c_route);
