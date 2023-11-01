@@ -7,33 +7,38 @@
 #include "puzzle/puzzle_logic.hpp"
 #include "puzzle/graph_logic.hpp"
 
+/*
 inline void node::set_node(const Matrix54i puz, const int cos, const node &nd)
 {
     puzzle = puz;
     cost = cos;
     side_node.push_back(nd);
 }
+*/
 
-bool isvalue_already(const std::unordered_map<std::string, std::string, KeyHasher_std, KeyEqual_std> &puzzle_index, const std::string hash_puzzle)
+bool isvalue_already(const comparative_index &puzzle_index, const std::string &hash_puzzle)
 {
     auto it = puzzle_index.find(hash_puzzle);
     return it != puzzle_index.end();
 }
 
-void make_newnode(const Matrix54i state, const int i, node &new_node, const node &now)
+void make_newnode(const int &count_matrix, const int i, node &new_node, const node &now)
 {
-    new_node.puzzle = state;
+    new_node.puzzle = count_matrix;
     new_node.cost = i;
     new_node.side_node.push_back(now);
 }
 
-void dikstrqueue(const int i,
-                 const Matrix54i &now_puzzle,
-                 const std::vector<Matrix54i> &movable,
-                 std::unordered_map<std::string, std::string, KeyHasher_std, KeyEqual_std> &puzzle_index,
-                 std::unordered_map<Matrix54i, node, KeyHasher, KeyEqual> &edges,
-                 std::vector<std::vector<node>> &clear_route,
-                 std::queue<Matrix54i> &puzzle_list)
+void dikstrqueue(
+    int &count_matrix,
+    const int i,
+    const Matrix54i &now_puzzle,
+    const std::vector<Matrix54i> &movable,
+    comparative_index &puzzle_index,
+    node_index &edges,
+    std::vector<std::vector<node>> &clear_route,
+    std::queue<Matrix54i> &puzzle_list,
+    std::vector<Matrix54i> &matrix_index)
 {
     Matrix54i copy_now_puzzle = now_puzzle;
     Matrix54i now_simple = board_simple(copy_now_puzzle);
@@ -48,7 +53,9 @@ void dikstrqueue(const int i,
         if (!isvalue_already(puzzle_index, hash_puzzle))
         {
             node new_node;
-            make_newnode(state, i, new_node, now);
+            matrix_index.push_back(state);
+            count_matrix++;
+            make_newnode(count_matrix, i, new_node, now);
             edges[state_simple] = new_node;
             puzzle_index[hash_puzzle] = hash_puzzle;
             puzzle_list.push(state);
@@ -72,11 +79,11 @@ void dikstrqueue(const int i,
     }
 }
 
-std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzzle)
+std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzzle, std::vector<Matrix54i> &matrix_index)
 {
     // sengen
-    std::unordered_map<Matrix54i, node, KeyHasher, KeyEqual> edges;
-    std::unordered_map<std::string, std::string, KeyHasher_std, KeyEqual_std> puzzle_index;
+    node_index edges;
+    comparative_index puzzle_index;
     std::queue<Matrix54i> puzzle_list;
     std::vector<std::vector<node>> clear_route;
     node first_node;
@@ -89,11 +96,14 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     std::string str = to_hashable(simple_puzzle);
 
     // nodeの設定を行う
-    first_node.puzzle = puzzle;
+    int count_matrix = 0;
+    matrix_index.push_back(puzzle);
+    first_node.puzzle = count_matrix;
     first_node.cost = 0;
     edges[simple_puzzle] = first_node;
     puzzle_index[str] = str;
     int i = 0;
+
     while (!puzzle_list.empty())
     {
 
@@ -101,8 +111,8 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
         puzzle_list.pop();
         std::vector<Matrix54i> movable = moved_board_list(now_puzzle);
         i++;
-        dikstrqueue(i, now_puzzle, movable,
-                    puzzle_index, edges, clear_route, puzzle_list);
+        dikstrqueue(count_matrix, i, now_puzzle, movable,
+                    puzzle_index, edges, clear_route, puzzle_list ,matrix_index);
     }
 
     std::vector<node> s = shortestroute_find_dikstr(clear_route);
@@ -112,7 +122,7 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     return clear_route;
 }
 
-node dikstr(node now_node)
+node dikstr(node &now_node)
 {
     // 最も小さいノードを定義
     node min_node;

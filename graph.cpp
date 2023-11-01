@@ -510,7 +510,7 @@ std::string to_hashable_pluscomma(const Matrix54i &simple_puzzle)
 }
 
 bool exist(const std::string &hash_puzzle,
-           std::vector<std::string> puzzle_state)
+           std::vector<std::string> &puzzle_state)
 {
     std::chrono::system_clock::time_point start, end; // 計測用関数
     start = std::chrono::system_clock::now();
@@ -534,7 +534,7 @@ bool exist(const std::string &hash_puzzle,
 
 std::vector<Matrix54i> clearroute(std::unordered_map<Matrix54i, Matrix54i,
                                                      KeyHasher, KeyEqual> &edges,
-                                  const Matrix54i moved_puzzle)
+                                  const Matrix54i &moved_puzzle)
 {
     std::chrono::system_clock::time_point start, end; // 計測用関数
 
@@ -552,7 +552,7 @@ std::vector<Matrix54i> clearroute(std::unordered_map<Matrix54i, Matrix54i,
     return c_route;
 }
 
-void queue_state_append(Matrix54i before_moving, std::vector<Matrix54i> movable,
+void queue_state_append(const Matrix54i &before_moving, std::vector<Matrix54i> &movable,
                         std::vector<std::string> &puzzle_state,
                         std::unordered_map<Matrix54i, Matrix54i, KeyHasher, KeyEqual> &edges,
                         std::queue<Matrix54i> &puzzle_list,
@@ -576,15 +576,14 @@ void queue_state_append(Matrix54i before_moving, std::vector<Matrix54i> movable,
     }
 }
 
-std::vector<std::vector<Matrix54i>> breadth_first_search(Matrix54i &puzzle)
+std::vector<std::vector<Matrix54i>> breadth_first_search(const Matrix54i &puzzle)
 {
     std::vector<std::vector<Matrix54i>> c_route;
     std::unordered_map<Matrix54i, Matrix54i, KeyHasher, KeyEqual> edges;
     std::vector<std::string> puzzle_state;
     std::queue<Matrix54i> puzzle_list;
-    Matrix54i copy_puzzle = puzzle;
     puzzle_list.push(puzzle);
-    Matrix54i simple_puzzle = board_simple(copy_puzzle);
+    Matrix54i simple_puzzle = board_simple(puzzle);
     std::string str = to_hashable(simple_puzzle);
     puzzle_state.push_back(str);
     while (!puzzle_list.empty())
