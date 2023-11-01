@@ -57,7 +57,7 @@ void dikstrqueue(
             count_matrix++;
             make_newnode(count_matrix, i, new_node, now);
             edges[state_simple] = new_node;
-            puzzle_index[hash_puzzle] = hash_puzzle;
+            puzzle_index.insert(hash_puzzle);
             puzzle_list.push(state);
 
             if (clear(state))
@@ -97,7 +97,7 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     first_node.puzzle = count_matrix;
     first_node.cost = 0;
     edges[simple_puzzle] = first_node;
-    puzzle_index[str] = str;
+    puzzle_index.insert(str);
     int i = 0;
 
     while (!puzzle_list.empty())

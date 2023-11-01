@@ -5,6 +5,7 @@
 #include <vector>
 #include <queue>
 #include <unordered_map>
+#include <unordered_set>
 #include <functional>
 #include <fstream>
 #include "puzzle/puzzle_logic.hpp"
@@ -55,8 +56,9 @@ struct KeyEqual_std
         return lhs == rhs;
     }
 };
-using comparative_index = std::unordered_map<std::string, std::string, KeyHasher_std, KeyEqual_std>;
+using comparative_index = std::unordered_set<std::string, KeyHasher_std, KeyEqual_std>;
 using node_index = std::unordered_map<Matrix54i, node, KeyHasher, KeyEqual>;
+
 bool isvalue_already(const comparative_index &puzzle_index, const std::string &hash_puzzle);
 bool clear(const Matrix54i &puzzle);
 Matrix54i num_simple(const Matrix54i &puzzle, const int i);
