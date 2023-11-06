@@ -12,7 +12,7 @@ include_directories(include)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
-add_library(Hakoirimusume_lib graph.cpp puzzle.cpp fast_clear_logic.cpp shortest_clear_logic.cpp)
+add_library(Hakoirimusume_lib graph.cpp puzzle.cpp shortest_clear_logic.cpp)
 target_link_libraries (Hakoirimusume_lib Eigen3::Eigen)
 
 add_executable(Hakoirimusume main.cpp)

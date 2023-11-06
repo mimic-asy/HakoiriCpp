@@ -20,7 +20,7 @@ int main()
     myfile.open("example.csv");
     for (node &n : min)
     {
-        std::string one_colmn = to_hashable_pluscomma(matrix_index[n.puzzle]);
+        std::string one_colmn = mat_to_str_pluscomma(matrix_index[n.puzzle]);
         one_colmn.pop_back();
         one_colmn += "\n";
         myfile << one_colmn;

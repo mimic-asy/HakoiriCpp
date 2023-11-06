@@ -1,0 +1,2 @@
+/usr/bin/ar qc libHakoirimusume_lib.a CMakeFiles/Hakoirimusume_lib.dir/graph.cpp.o CMakeFiles/Hakoirimusume_lib.dir/puzzle.cpp.o CMakeFiles/Hakoirimusume_lib.dir/shortest_clear_logic.cpp.o
+/usr/bin/ranlib libHakoirimusume_lib.a

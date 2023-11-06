@@ -1212,20 +1212,20 @@ namespace
         EXPECT_EQ(puzzle(3, 1), 10);
     }
 
-    TEST(to_hashable, string)
+    TEST(mat_to_str, string)
     {
         Matrix54i puzzle = init_puzzle();
         std::string str = "1002100235543674810109";
-        std::string hash = to_hashable(puzzle);
+        std::string hash = mat_to_str(puzzle);
         EXPECT_EQ(hash, str);
     }
 
-    TEST(to_hashable, string0)
+    TEST(mat_to_str, string0)
     {
         Matrix54i puzzle = init_puzzle();
         puzzle = board_simple(puzzle);
         std::string str = "2002200225522332310103";
-        std::string hash = to_hashable(puzzle);
+        std::string hash = mat_to_str(puzzle);
         EXPECT_EQ(hash, str);
     }
 
