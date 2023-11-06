@@ -478,12 +478,15 @@ std::vector<Matrix54i> moved_board_list(const Matrix54i &input)
     return movable;
 }
 
-std::string to_hashable(const Matrix54i &simple_puzzle)
+std::string mat_to_str(const Matrix54i &simple_puzzle)
 {
     std::string hash;
-    for (int y = 0; y < 5; y++)
+    int rows = simple_puzzle.rows();
+    int cols = simple_puzzle.cols();
+
+    for (int y = 0; y < rows; y++)
     {
-        for (int x = 0; x < 4; x++)
+        for (int x = 0; x < cols; x++)
         {
             int num = simple_puzzle(y, x);
             std::string str = std::to_string(num);
@@ -493,7 +496,7 @@ std::string to_hashable(const Matrix54i &simple_puzzle)
     return hash;
 }
 
-std::string to_hashable_pluscomma(const Matrix54i &simple_puzzle)
+std::string mat_to_str_pluscomma(const Matrix54i &simple_puzzle)
 {
     std::string hash;
     for (int y = 0; y < 5; y++)
@@ -562,7 +565,7 @@ void queue_state_append(const Matrix54i &before_moving, std::vector<Matrix54i> &
     {
         Matrix54i state_copy = state;
         Matrix54i simple_puzzle = board_simple(state_copy);
-        std::string hash_puzzle = to_hashable(simple_puzzle);
+        std::string hash_puzzle = mat_to_str(simple_puzzle);
         if (exist(hash_puzzle, puzzle_state))
         {
             edges[state] = before_moving;
@@ -584,7 +587,7 @@ std::vector<std::vector<Matrix54i>> breadth_first_search(const Matrix54i &puzzle
     std::queue<Matrix54i> puzzle_list;
     puzzle_list.push(puzzle);
     Matrix54i simple_puzzle = board_simple(puzzle);
-    std::string str = to_hashable(simple_puzzle);
+    std::string str = mat_to_str(simple_puzzle);
     puzzle_state.push_back(str);
     while (!puzzle_list.empty())
     {

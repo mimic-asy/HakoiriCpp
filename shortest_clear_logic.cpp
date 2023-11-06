@@ -7,16 +7,27 @@
 #include "puzzle/puzzle_logic.hpp"
 #include "puzzle/graph_logic.hpp"
 
-/*
-inline void node::set_node(const Matrix54i puz, const int cos, const node &nd)
-{
-    puzzle = puz;
-    cost = cos;
-    side_node.push_back(nd);
-}
-*/
 
-bool isvalue_already(const comparative_index &puzzle_index, const std::string &hash_puzzle)
+
+
+std::size_t to_hash(const Matrix54i &simple_puzzle)
+{
+    std::size_t hash;
+    int rows = simple_puzzle.rows();
+    int cols = simple_puzzle.cols();
+
+    for (int y = 0; y < rows; y++)
+    {
+        for (int x = 0; x < cols; x++)
+        {
+            int num = simple_puzzle(y, x);
+            hash ^= num + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+        }
+    }
+    return hash;
+}
+
+bool isvalue_already(const comparative_index &puzzle_index, const size_t &hash_puzzle)
 {
     auto it = puzzle_index.find(hash_puzzle);
     return it != puzzle_index.end();
@@ -48,16 +59,18 @@ void dikstrqueue(
     {
         Matrix54i state_copy = state;
         Matrix54i state_simple = board_simple(state_copy);
-        std::string hash_puzzle = to_hashable(state_simple);
+        std::string hash_puzzle = mat_to_str(state_simple);
+        std::hash<std::string> hash_fn;
+        size_t hash_value = hash_fn(hash_puzzle);
 
-        if (!isvalue_already(puzzle_index, hash_puzzle))
+        if (!isvalue_already(puzzle_index, hash_value))
         {
             node new_node;
             matrix_index.push_back(state);
             count_matrix++;
             make_newnode(count_matrix, i, new_node, now);
             edges[state_simple] = new_node;
-            puzzle_index.insert(hash_puzzle);
+            puzzle_index.insert(hash_value);
             puzzle_list.push(state);
 
             if (clear(state))
@@ -89,7 +102,7 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     // puzzleを比較するための形にする
     Matrix54i simple_puzzle = board_simple(puzzle);
     // string型に変換する
-    std::string str = to_hashable(simple_puzzle);
+    std::string str = mat_to_str(simple_puzzle);
 
     // nodeの設定を行う
     int count_matrix = 0;
@@ -97,7 +110,9 @@ std::vector<std::vector<node>> breadth_first_search_dikstr(const Matrix54i &puzz
     first_node.puzzle = count_matrix;
     first_node.cost = 0;
     edges[simple_puzzle] = first_node;
-    puzzle_index.insert(str);
+    std::hash<std::string> hash_fn;
+    size_t str_val = hash_fn(str);
+    puzzle_index.insert(str_val);
     int i = 0;
 
     while (!puzzle_list.empty())

@@ -10,7 +10,8 @@
 #include <fstream>
 #include "puzzle/puzzle_logic.hpp"
 
-std::string to_hashable(const Matrix54i &simple_puzzle);
+std::string mat_to_str(const Matrix54i &simple_puzzle);
+std::size_t to_hash(const Matrix54i &simple_puzzle);
 
 struct node
 {
@@ -23,9 +24,7 @@ struct KeyHasher
 { // インスタンスを取得する->operator
     int operator()(const Matrix54i &a) const
     {
-        std::string a_str = to_hashable(const_cast<Matrix54i &>(a));
-        std::hash<std::string> hash_fn;
-        size_t hash_value = hash_fn(a_str);
+        size_t hash_value = to_hash(a);
         return hash_value;
     }
 };
@@ -37,26 +36,8 @@ struct KeyEqual
         return a == b;
     }
 };
-struct KeyHasher_std
-{
-    int operator()(const std::string &key) const
-    {
-        std::hash<std::string> hash_fn;
-        size_t hash_value = hash_fn(key);
-        return hash_value;
-    }
-};
 
-// カスタムキー比較関数の構造体 (KeyEqual)
-struct KeyEqual_std
-{
-    bool operator()(const std::string &lhs, const std::string &rhs) const
-    {
-
-        return lhs == rhs;
-    }
-};
-using comparative_index = std::unordered_set<std::string, KeyHasher_std, KeyEqual_std>;
+using comparative_index = std::unordered_set<size_t>;
 using node_index = std::unordered_map<Matrix54i, node, KeyHasher, KeyEqual>;
 
 bool isvalue_already(const comparative_index &puzzle_index, const std::string &hash_puzzle);
@@ -84,7 +65,7 @@ std::vector<Matrix54i> move_left(const Matrix54i &puzzle);
 std::vector<Matrix54i> move_up(const Matrix54i &puzzle);
 std::vector<Matrix54i> move_down(const Matrix54i &puzzle);
 std::vector<Matrix54i> moved_board_list(const Matrix54i &puzzle);
-std::string to_hashable_pluscomma(const Matrix54i &simple_puzzle);
+std::string mat_to_str_pluscomma(const Matrix54i &simple_puzzle);
 bool exist(const std::string &hash_puzzle,
            std::vector<std::string> &puzzle_state);
 std::vector<Matrix54i> clearroute(std::unordered_map<Matrix54i, Matrix54i,
