@@ -14,7 +14,7 @@ rcParams['font.sans-serif'] = ['Hiragino Maru Gothic Pro', 'Yu Gothic', 'Meirio'
 lis = []
 
 
-with open('/home/poyoyonland/projects/Hakoiricpp/build/example.csv') as puzzle:
+with open('build/example.csv') as puzzle:
     reader = csv.reader(puzzle)
     for row in reader:
         row_arr = np.array(row)
