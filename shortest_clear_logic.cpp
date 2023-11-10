@@ -40,9 +40,9 @@ std::vector<Node> bfs(const Matrix54i &puzzle)
     puzzle_list.push(puzzle); // puzzle list in first node
 
     size_t hash = be_hash_to_simpleboard(puzzle);
-    Node first_node{puzzle, 0, std::vector<Node>{}};                         // to be hash value for puzzle
-    node_hash_map[hash] = first_node; // input node map puzzle
-    board_hash_value.insert(hash);                                         // input board_hash_value puzzle
+    Node first_node{puzzle, 0, std::vector<Node>{}}; // to be hash value for puzzle
+    node_hash_map[hash] = first_node;                // input node map puzzle
+    board_hash_value.insert(hash);                   // input board_hash_value puzzle
 
     int cost = 0;
 
@@ -61,20 +61,19 @@ std::vector<Node> bfs(const Matrix54i &puzzle)
             {
                 continue;
             }
-                Node new_node;
-                new_node.side_node.push_back(now_node);
-                new_node.cost = cost;
-                new_node.puzzle = state;
-                node_hash_map[hash_value] = new_node; // input new_node HashNodeMap
+            Node new_node;
+            new_node.side_node.push_back(now_node);
+            new_node.cost = cost;
+            new_node.puzzle = state;
+            node_hash_map[hash_value] = new_node; // input new_node HashNodeMap
 
-                board_hash_value.insert(hash_value); // input hashvalue
-                puzzle_list.push(state);
+            board_hash_value.insert(hash_value); // input hashvalue
+            puzzle_list.push(state);
 
-                if (clear(state))
-                {
-                    clear_boards.push_back(new_node);
-                }
-
+            if (clear(state))
+            {
+                clear_boards.push_back(new_node);
+            }
         }
     }
 
@@ -95,7 +94,6 @@ std::vector<Node> bfs(const Matrix54i &puzzle)
 
     return s;
 }
-
 
 std::vector<Node> find_shortest_route(const std::vector<std::vector<Node>> &clear_route)
 {
