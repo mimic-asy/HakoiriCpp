@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <cstdio>
 #include <cstring>
@@ -11,16 +10,14 @@
 
 int main()
 {
-    Matrix54i puzzle = init_puzzle();
-    std::vector<Matrix54i> matrix_index;
-    std::vector<std::vector<node>> route = breadth_first_search_dikstr(puzzle,matrix_index);
-    std::vector<node> min = shortestroute_find_dikstr(route);
+    const Matrix54i puzzle = init_puzzle();
+    std::vector<Node> route = bfs(puzzle);
 
     std::ofstream myfile;
     myfile.open("example.csv");
-    for (node &n : min)
+    for (Node &nd :route)
     {
-        std::string one_colmn = mat_to_str_pluscomma(matrix_index[n.puzzle]);
+        std::string one_colmn = mat_to_str_pluscomma(nd.puzzle);
         one_colmn.pop_back();
         one_colmn += "\n";
         myfile << one_colmn;
